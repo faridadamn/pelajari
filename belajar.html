@@ -256,31 +256,9 @@ const MODS=[
 ];
 
 let curMod=0,curTab='video',progress=[],QS={};
-function jsonpRequest(url, callbackName) {
-  return new Promise((resolve, reject) => {
-    const callback = callbackName || 'jsonp_callback_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
-    const script = document.createElement('script');
-    
-    const separator = url.includes('?') ? '&' : '?';
-    script.src = url + separator + 'callback=' + callback;
-    
-    window[callback] = function(data) {
-      delete window[callback];
-      document.body.removeChild(script);
-      resolve(data);
-    };
-    
-    script.onerror = function() {
-      delete window[callback];
-      document.body.removeChild(script);
-      reject(new Error('JSONP request failed'));
-    };
-    
-    document.body.appendChild(script);
-  });
-}
+// Ganti seluruh fungsi jsonpRequest dan fetchData dengan ini:
 
-// Fungsi untuk GET data dari server
+// Fungsi untuk GET data - pakai fetch biasa dengan mode cors
 async function fetchData(action, params = {}) {
   if (!CFG.scriptUrl || CFG.scriptUrl.includes('YOUR_SCRIPT_ID')) {
     console.warn('Script URL not configured');
@@ -293,7 +271,20 @@ async function fetchData(action, params = {}) {
   });
   
   try {
-    const data = await jsonpRequest(url);
+    // Pakai fetch biasa, karena AppScript sudah support CORS
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors',  // ← ganti dari no-cors ke cors
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
     return data;
   } catch (error) {
     console.error('Fetch error:', error);
@@ -301,6 +292,8 @@ async function fetchData(action, params = {}) {
     return null;
   }
 }
+
+// Hapus fungsi jsonpRequest (tidak dipakai lagi)
 
 // Fungsi untuk POST dengan no-cors
 async function postData(action, data) {
