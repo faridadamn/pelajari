@@ -3,149 +3,165 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portal Belajar — AkademiPro</title>
+<title>Admin — Pelajari</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* (salin semua style dari kode belajar.html Anda, sama persis) */
-:root{--brand:#1a6b4a;--brand2:#2d9668;--bl:#e8f5ee;--bm:#9fe1cb;--acc:#f0a500;--tx:#121c17;--txm:#4a6055;--txl:#8fa89d;--bg:#f5f9f7;--wh:#fff;--br:#d8e8e1;--r:14px;--rs:8px;--fh:'Sora',sans-serif;--fb:'DM Sans',sans-serif}
+:root{--brand:#1a6b4a;--brand2:#2d9668;--bl:#e8f5ee;--bm:#9fe1cb;--acc:#f0a500;--tx:#121c17;--txm:#4a6055;--txl:#8fa89d;--bg:#f5f9f7;--wh:#fff;--br:#d8e8e1;--dan:#e05252;--danl:#ffeaea;--warn:#f0a500;--warnl:#fff8e6;--r:14px;--rs:8px;--sh:0 2px 16px rgba(26,107,74,.08);--fh:'Sora',sans-serif;--fb:'DM Sans',sans-serif}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--fb);background:var(--bg);color:var(--tx);line-height:1.6}
-.lw{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(135deg,var(--brand) 0%,#0f4a33 100%)}
-.lb{background:var(--wh);border-radius:var(--r);padding:36px;width:100%;max-width:380px}
+body{font-family:var(--fb);background:var(--bg);color:var(--tx);line-height:1.5}
+/* LOGIN */
+.lw{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.lb{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);padding:36px;width:100%;max-width:360px;box-shadow:var(--sh);text-align:center}
 .lb-logo{font-family:var(--fh);font-size:22px;font-weight:700;color:var(--brand);margin-bottom:4px}
 .lb-logo span{color:var(--acc)}
-.lb-sub{font-size:13px;color:var(--txl);margin-bottom:24px}
-.lb h2{font-family:var(--fh);font-size:17px;margin-bottom:18px}
+.lb-sub{font-size:13px;color:var(--txl);margin-bottom:22px}
+.lb h2{font-family:var(--fh);font-size:17px;margin-bottom:16px}
 .lb input{width:100%;padding:11px 14px;border:1.5px solid var(--br);border-radius:var(--rs);font-size:14px;font-family:var(--fb);margin-bottom:12px;outline:none;transition:border-color .2s}
 .lb input:focus{border-color:var(--brand)}
 .lb-btn{width:100%;background:var(--brand);color:#fff;border:none;padding:12px;border-radius:var(--rs);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
 .lb-btn:hover{background:var(--brand2)}
-.lb-err{font-size:12px;color:#e05252;margin-top:8px;display:none;text-align:center}
-.lb-help{font-size:11px;color:var(--txl);text-align:center;margin-top:12px}
-.lb-help a{color:var(--brand)}
+.lb-err{font-size:12px;color:var(--dan);margin-top:8px;display:none}
+/* LAYOUT */
 .app{display:none;height:100vh;overflow:hidden}
 .app.on{display:flex}
-.sb{width:260px;background:var(--wh);border-right:1px solid var(--br);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0}
-.sb-top{padding:16px;border-bottom:1px solid var(--br)}
-.sb-brand{font-family:var(--fh);font-size:14px;font-weight:700;color:var(--brand);margin-bottom:10px}
-.sb-brand span{color:var(--acc)}
-.u-row{display:flex;align-items:center;gap:10px}
-.u-av{width:36px;height:36px;border-radius:50%;background:var(--bl);color:var(--brand);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--fh)}
-.u-name{font-size:13px;font-weight:600}
-.u-course{font-size:11px;color:var(--txl)}
-.prog-sec{padding:12px 16px;border-bottom:1px solid var(--br)}
-.prog-lbl{display:flex;justify-content:space-between;font-size:11px;color:var(--txl);margin-bottom:6px}
-.prog-bg{background:var(--br);border-radius:4px;height:5px}
-.prog-fill{height:5px;border-radius:4px;background:var(--brand);transition:width .5s}
-.m-list{flex:1;padding:10px 8px;overflow-y:auto}
-.m-sec-lbl{font-size:10px;font-weight:700;color:var(--txl);text-transform:uppercase;letter-spacing:1.5px;padding:8px 8px 4px}
-.m-item{display:flex;align-items:center;gap:10px;padding:9px 8px;border-radius:var(--rs);cursor:pointer;transition:background .15s;margin-bottom:2px}
-.m-item:hover{background:var(--bg)}
-.m-item.active{background:var(--bl)}
-.m-item.locked{opacity:.4;cursor:not-allowed}
-.m-ic{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;background:var(--bg);color:var(--txl);font-weight:700}
-.m-item.done .m-ic{background:var(--bl);color:var(--brand)}
-.m-item.active .m-ic{background:var(--brand);color:#fff}
-.m-txt{flex:1;min-width:0}
-.m-title{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.m-dur{font-size:10px;color:var(--txl)}
-.m-item.active .m-title{color:var(--brand);font-weight:600}
-.sb-bot{padding:12px 16px;border-top:1px solid var(--br)}
-.exp-b{background:var(--bl);border-radius:var(--rs);padding:8px 12px;font-size:11px;color:var(--txm)}
-.exp-b strong{color:var(--brand);display:block;font-size:13px}
-.main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:var(--wh);border-bottom:1px solid var(--br);flex-shrink:0}
-.tb-bc{font-size:13px;color:var(--txl)}
-.tb-bc strong{color:var(--tx)}
-.hbg{display:none;background:none;border:none;font-size:18px;cursor:pointer;color:var(--tx)}
+.sb{width:220px;background:var(--wh);border-right:1px solid var(--br);display:flex;flex-direction:column;flex-shrink:0}
+.sb-logo{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--brand);padding:18px 18px 14px;border-bottom:1px solid var(--br)}
+.sb-logo span{color:var(--acc)}
+.sb-logo small{display:block;font-size:10px;font-weight:400;color:var(--txl);margin-top:1px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--txm);cursor:pointer;border-left:3px solid transparent;transition:all .15s}
+.nav-item:hover{background:var(--bl);color:var(--brand)}
+.nav-item.active{background:var(--bl);color:var(--brand);border-left-color:var(--brand)}
+.nav-item .ic{font-size:14px;width:18px;text-align:center}
+.sb-foot{margin-top:auto;padding:14px 18px;border-top:1px solid var(--br);font-size:11px;color:var(--txl)}
+.sb-foot strong{display:block;font-size:13px;color:var(--tx);margin-bottom:2px}
+.main{flex:1;overflow:auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:var(--wh);border-bottom:1px solid var(--br);position:sticky;top:0;z-index:10}
+.tb-title{font-family:var(--fh);font-size:15px;font-weight:600}
 .lo-btn{font-size:12px;color:var(--txl);background:none;border:1px solid var(--br);padding:6px 14px;border-radius:20px;cursor:pointer;font-family:var(--fb)}
-.lo-btn:hover{color:#e05252;border-color:#e05252}
-.ca{flex:1;padding:28px 32px;max-width:860px;width:100%}
-.mod-num{font-size:11px;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px}
-.mod-title{font-family:var(--fh);font-size:22px;font-weight:700;margin-bottom:8px}
-.mod-meta{display:flex;gap:16px;font-size:12px;color:var(--txl);margin-bottom:20px;flex-wrap:wrap}
-.ctabs{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--br)}
-.ctab{padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--txl);border-bottom:2px solid transparent;margin-bottom:-1px;font-family:var(--fb);transition:all .2s;display:flex;align-items:center;gap:6px}
-.ctab.active{color:var(--brand);border-bottom-color:var(--brand)}
-.ctab.qa.active{color:var(--acc);border-bottom-color:var(--acc)}
-.ctab:hover:not(.active){color:var(--tx)}
-.ctab .badge{background:#fff3cd;color:#856404;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:700}
-.ctab .badge.ok{background:var(--bl);color:#0a5c38}
-.vid-wrap{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#0a3d26,#1a6b4a);border-radius:var(--r);display:flex;align-items:center;justify-content:center;margin-bottom:16px;overflow:hidden}
-.vid-wrap iframe{width:100%;height:100%;border:none}
-.vid-ph{text-align:center;color:#fff}
-.play-c{width:64px;height:64px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:22px}
-.vid-note{font-size:12px;color:var(--txl);padding:12px;background:var(--bl);border-radius:var(--rs);margin-bottom:16px}
-.pdf-card{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);padding:18px;display:flex;align-items:center;gap:16px;margin-bottom:12px}
-.pdf-ic{width:44px;height:52px;background:linear-gradient(135deg,#e05252,#c03c3c);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0}
-.pdf-info{flex:1}
-.pdf-name{font-size:14px;font-weight:600;margin-bottom:2px}
-.pdf-meta{font-size:12px;color:var(--txl)}
-.btn-dl{background:var(--brand);color:#fff;border:none;padding:8px 18px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fb);text-decoration:none;display:inline-block}
-.teks{font-size:15px;line-height:1.8;color:var(--tx)}
-.teks h3{font-family:var(--fh);font-size:17px;font-weight:600;margin:20px 0 10px}
-.teks h3:first-child{margin-top:0}
-.teks p{margin-bottom:14px}
-.teks ul{margin:0 0 14px 20px}
-.teks li{margin-bottom:6px}
-.teks .hl{background:var(--bl);border-left:3px solid var(--brand);padding:12px 16px;margin:16px 0}
-.qwrap{max-width:640px}
-.qhdr{margin-bottom:20px}
-.qtitle{font-family:var(--fh);font-size:17px;font-weight:700;margin-bottom:4px}
-.qsub{font-size:13px;color:var(--txm)}
-.qprog-bg{background:var(--br);border-radius:4px;height:4px;margin:10px 0 4px}
-.qprog-fill{height:4px;border-radius:4px;background:var(--acc);transition:width .4s}
-.qctr{font-size:12px;color:var(--txl);display:flex;justify-content:space-between;margin-bottom:16px}
-.qcard{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);padding:22px;margin-bottom:14px}
-.qnum{font-size:11px;font-weight:700;color:var(--txl);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
-.qtext{font-size:15px;font-weight:500;margin-bottom:16px;line-height:1.5}
-.qopts{display:flex;flex-direction:column;gap:8px}
-.qopt{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:1.5px solid var(--br);border-radius:var(--rs);cursor:pointer;transition:all .15s;font-size:14px;color:var(--tx);background:var(--wh);font-family:var(--fb);text-align:left;width:100%}
-.qopt:hover:not(:disabled){border-color:var(--brand2);background:var(--bl)}
-.qopt:disabled{cursor:default}
-.qopt.correct{border-color:var(--brand);background:var(--bl);color:var(--brand)}
-.qopt.wrong{border-color:#e05252;background:#ffeaea;color:#c03030}
-.qopt.missed{border-color:var(--brand);background:#f0fff8;color:var(--brand)}
-.qltr{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--br);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
-.qopt.correct .qltr{background:var(--brand);color:#fff;border-color:var(--brand)}
-.qopt.wrong .qltr{background:#e05252;color:#fff;border-color:#e05252}
-.qopt.missed .qltr{background:var(--brand);color:#fff;border-color:var(--brand)}
-.qfb{margin-top:10px;padding:10px 14px;border-radius:0;font-size:13px;display:none}
-.qfb.show{display:block}
-.qfb.ok{background:var(--bl);color:#0f6e56;border-left:3px solid var(--brand)}
-.qfb.err{background:#ffeaea;color:#a32d2d;border-left:3px solid #e05252}
-.qnav{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
-.btn-qnext{background:var(--brand);color:#fff;border:none;padding:10px 24px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
-.btn-qnext:hover{background:var(--brand2)}
-.btn-qnext:disabled{background:var(--br);cursor:not-allowed;color:var(--txl)}
-.qresult{text-align:center;padding:28px 20px}
-.sring{width:96px;height:96px;border-radius:50%;margin:0 auto 18px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:4px solid var(--brand)}
-.sring.fail{border-color:#e05252}
-.spct{font-family:var(--fh);font-size:28px;font-weight:700}
-.sring.pass .spct{color:var(--brand)}
-.sring.fail .spct{color:#e05252}
-.slbl{font-size:11px;color:var(--txl)}
-.rtitle{font-family:var(--fh);font-size:19px;font-weight:700;margin-bottom:6px}
-.rsub{font-size:13px;color:var(--txm);margin-bottom:20px;max-width:360px;margin-left:auto;margin-right:auto}
-.sdetail{display:flex;justify-content:center;gap:28px;margin-bottom:22px}
-.sitem{text-align:center}
-.sitem strong{display:block;font-family:var(--fh);font-size:20px;font-weight:700}
-.sitem.c strong{color:var(--brand)}
-.sitem.w strong{color:#e05252}
-.sitem span{font-size:11px;color:var(--txl)}
-.btn-retry{background:none;border:1.5px solid var(--br);color:var(--txm);padding:10px 22px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb);margin-right:8px}
-.btn-nxtm{background:var(--brand);color:#fff;border:none;padding:10px 26px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
-.btn-nxtm:hover{background:var(--brand2)}
-.btn-nxtm:disabled{background:var(--br);cursor:not-allowed;color:var(--txl)}
-.cnav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:20px;border-top:1px solid var(--br)}
-.btn-prev{background:var(--wh);color:var(--txm);border:1.5px solid var(--br);padding:10px 22px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
-.btn-prev:disabled{opacity:.35;cursor:not-allowed}
-.btn-mark{background:var(--brand);color:#fff;border:none;padding:10px 26px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
-.btn-mark:hover{background:var(--brand2)}
-.done-badge{display:flex;align-items:center;gap:8px;background:var(--bl);border-radius:var(--rs);padding:9px 14px;font-size:13px;color:var(--brand);font-weight:500;border:1px solid var(--bm);margin-bottom:16px}
+.lo-btn:hover{color:var(--dan);border-color:var(--dan)}
+.page{display:none;padding:24px}
+.page.on{display:block}
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+.stat{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);padding:16px}
+.stat-lbl{font-size:11px;font-weight:600;color:var(--txl);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.stat-val{font-family:var(--fh);font-size:26px;font-weight:700;margin-bottom:2px}
+.stat-sub{font-size:11px;color:var(--txl)}
+.stat.warn .stat-val{color:var(--warn)}
+.stat.ok .stat-val{color:var(--brand)}
+.stat.acc .stat-val{color:var(--acc)}
+/* TABLE */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.sec-title{font-family:var(--fh);font-size:15px;font-weight:600}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filters input,.filters select{padding:7px 12px;border:1px solid var(--br);border-radius:var(--rs);font-size:13px;font-family:var(--fb);background:var(--wh);color:var(--tx);outline:none}
+.filters input:focus,.filters select:focus{border-color:var(--brand)}
+.filters input{width:190px}
+.btn-act{background:var(--brand);color:#fff;border:none;padding:8px 16px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.btn-act:hover{background:var(--brand2)}
+.tbl{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);overflow:hidden}
+.th,.tr{display:grid;grid-template-columns:1.8fr 1.5fr 1.2fr 1.3fr 1.1fr 1.1fr;gap:8px;padding:10px 14px;align-items:center}
+.th{background:var(--bg);font-size:11px;font-weight:600;color:var(--txl);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--br)}
+.tr{border-bottom:1px solid var(--br);font-size:13px;transition:background .1s}
+.tr:last-child{border-bottom:none}
+.tr:hover{background:var(--bg)}
+.nm{font-weight:600;font-size:13px}
+.em{font-size:11px;color:var(--txl)}
+.bdg{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.bdg.pending{background:var(--warnl);color:#7a4f00}
+.bdg.verified{background:var(--bl);color:var(--brand)}
+.bdg.rejected{background:var(--danl);color:var(--dan)}
+.abtn{padding:5px 11px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--fb);border:none}
+.abtn.rev{background:var(--bl);color:var(--brand)}
+.abtn.rev:hover{background:var(--brand);color:#fff}
+.abtn.done{background:var(--bg);color:var(--txl);cursor:default}
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-bg.on{display:flex}
+.modal{background:var(--wh);border-radius:var(--r);padding:26px;width:100%;max-width:460px;max-height:88vh;overflow-y:auto}
+.modal-title{font-family:var(--fh);font-size:17px;font-weight:600;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
+.modal-close{background:none;border:1px solid var(--br);width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px;color:var(--txm)}
+.drow{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--br);font-size:13px}
+.drow:last-of-type{border-bottom:none}
+.dlbl{color:var(--txl);font-size:12px;font-weight:500}
+.dval{font-weight:500}
+.bukti-box{background:var(--bg);border-radius:var(--rs);padding:14px;text-align:center;margin:12px 0;border:1px dashed var(--br)}
+.m-actions{display:flex;gap:8px;margin-top:18px}
+.btn-reject{flex:1;background:var(--danl);color:var(--dan);border:1px solid #f7b3b3;padding:10px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.btn-reject:hover{background:var(--dan);color:#fff}
+.btn-verify{flex:2;background:var(--brand);color:#fff;border:none;padding:10px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.btn-verify:hover{background:var(--brand2)}
+/* KURSUS */
+.k-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.k-card{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);overflow:hidden;transition:box-shadow .2s}
+.k-card:hover{box-shadow:var(--sh)}
+.k-head{padding:18px 16px 14px;border-bottom:1px solid var(--br);display:flex;align-items:flex-start;gap:10px}
+.k-emoji{font-size:30px;flex-shrink:0}
+.k-info{}
+.k-name{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:3px}
+.k-meta{font-size:12px;color:var(--txl)}
+.k-price{font-family:var(--fh);font-size:16px;font-weight:700;color:var(--brand)}
+.k-body{padding:12px 16px}
+.k-stat-row{display:flex;justify-content:space-between;font-size:12px;color:var(--txl);margin-bottom:12px}
+.k-stat-val{font-weight:600;color:var(--tx)}
+.k-actions{display:flex;gap:8px}
+.btn-edit-k{flex:1;background:var(--bl);color:var(--brand);border:none;padding:8px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fb);text-align:center}
+.btn-edit-k:hover{background:var(--brand);color:#fff}
+.btn-materi{flex:1;background:var(--bg);color:var(--txm);border:1px solid var(--br);padding:8px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fb);text-align:center}
+.btn-materi:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
+/* MATERI EDITOR */
+.materi-layout{display:grid;grid-template-columns:260px 1fr;gap:16px;min-height:500px}
+.materi-sb{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);overflow:hidden}
+.msb-head{padding:12px 14px;border-bottom:1px solid var(--br);display:flex;justify-content:space-between;align-items:center}
+.msb-title{font-size:13px;font-weight:600}
+.btn-add-mod{background:var(--brand);color:#fff;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.mod-row{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--br);cursor:pointer;transition:background .15s;font-size:13px}
+.mod-row:last-child{border-bottom:none}
+.mod-row:hover{background:var(--bg)}
+.mod-row.active{background:var(--bl);color:var(--brand);font-weight:500}
+.mod-num-badge{width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--txl);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mod-row.active .mod-num-badge{background:var(--brand);color:#fff}
+.mod-row-title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mod-row-del{font-size:11px;color:var(--txl);background:none;border:none;cursor:pointer;padding:2px 5px;border-radius:4px}
+.mod-row-del:hover{background:var(--danl);color:var(--dan)}
+.materi-form{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);padding:20px}
+.form-title-ed{font-family:var(--fh);font-size:16px;font-weight:600;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--br);display:flex;justify-content:space-between;align-items:center}
+.fg{margin-bottom:16px}
+.fg label{display:block;font-size:12px;font-weight:600;color:var(--txm);margin-bottom:5px;letter-spacing:.2px}
+.fg label span{color:var(--dan)}
+.fg input,.fg select,.fg textarea{width:100%;padding:10px 12px;border:1.5px solid var(--br);border-radius:var(--rs);font-size:14px;font-family:var(--fb);background:var(--wh);color:var(--tx);outline:none;transition:border-color .2s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--brand)}
+.fg textarea{height:90px;resize:vertical}
+.fg-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg-hint{font-size:11px;color:var(--txl);margin-top:4px}
+/* QUIZ EDITOR */
+.quiz-editor{margin-top:20px;padding-top:20px;border-top:1px solid var(--br)}
+.qe-title{font-size:14px;font-weight:600;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.qe-item{background:var(--bg);border:1px solid var(--br);border-radius:var(--rs);padding:14px;margin-bottom:10px;position:relative}
+.qe-num{font-size:11px;font-weight:700;color:var(--txl);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.qe-item input,.qe-item select{padding:8px 10px;font-size:13px}
+.qe-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.qe-opt-row{display:flex;align-items:center;gap:6px}
+.qe-opt-lbl{font-size:11px;font-weight:700;color:var(--txl);width:14px;flex-shrink:0}
+.qe-opt-row input{padding:7px 10px;font-size:12px}
+.qe-del{position:absolute;top:10px;right:10px;background:none;border:none;font-size:13px;cursor:pointer;color:var(--txl);padding:2px 6px;border-radius:4px}
+.qe-del:hover{background:var(--danl);color:var(--dan)}
+.ans-row{margin-top:8px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txm)}
+.ans-row select{width:auto;padding:5px 8px;font-size:12px}
+.expl-row{margin-top:6px}
+.expl-row textarea{height:56px;font-size:12px}
+.btn-add-q{background:var(--bl);color:var(--brand);border:1px solid var(--bm);padding:7px 16px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.btn-add-q:hover{background:var(--brand);color:#fff}
+.form-actions{display:flex;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--br)}
+.btn-save{background:var(--brand);color:#fff;border:none;padding:11px 28px;border-radius:var(--rs);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.btn-save:hover{background:var(--brand2)}
+.btn-cancel{background:var(--wh);color:var(--txm);border:1.5px solid var(--br);padding:11px 22px;border-radius:var(--rs);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.btn-cancel:hover{border-color:var(--txm);color:var(--tx)}
+.save-ok{display:none;background:var(--bl);color:var(--brand);border:1px solid var(--bm);padding:8px 16px;border-radius:var(--rs);font-size:13px;font-weight:500}
+/* TOAST */
 .toast{position:fixed;bottom:24px;right:24px;background:var(--tx);color:#fff;padding:12px 20px;border-radius:var(--rs);font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .3s;z-index:9999}
 .toast.on{opacity:1}
-@media(max-width:768px){.ca{padding:16px}.sb{position:fixed;inset:0 auto 0 0;z-index:100;transform:translateX(-100%);transition:transform .3s}.sb.open{transform:translateX(0)}.hbg{display:block}.app.on{display:block}}
+@media(max-width:900px){.stat-grid{grid-template-columns:1fr 1fr}.materi-layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}}
 </style>
 </head>
 <body>
@@ -153,500 +169,419 @@ body{font-family:var(--fb);background:var(--bg);color:var(--tx);line-height:1.6}
 <div class="lw" id="lw">
   <div class="lb">
     <div class="lb-logo">Akademi<span>Pro</span></div>
-    <div class="lb-sub">Portal Belajar Siswa</div>
-    <h2>Masuk ke Akun Belajar</h2>
-    <input type="email" id="lemail" placeholder="Email pendaftaran">
-    <input type="text" id="ltoken" placeholder="Token akses (cek email kamu)" onkeyup="if(event.key==='Enter')doLogin()">
-    <button class="lb-btn" onclick="doLogin()">Mulai Belajar →</button>
-    <div class="lb-err" id="lerr">Email atau token tidak valid.</div>
-    <div class="lb-help">Demo: <strong>demo@akademi.id</strong> / <strong>DEMO2025</strong></div>
-    <div class="lb-help" style="margin-top:6px">Belum punya akses? <a href="index.html">Daftar di sini</a></div>
+    <div class="lb-sub">Panel Admin</div>
+    <h2>Masuk ke Dashboard</h2>
+    <input type="text" id="lu" placeholder="Username">
+    <input type="password" id="lp" placeholder="Password" onkeyup="if(event.key==='Enter')doLogin()">
+    <button class="lb-btn" onclick="doLogin()">Masuk →</button>
+    <div class="lb-err" id="lerr">Username atau password salah</div>
   </div>
 </div>
 
 <div class="app" id="appEl">
-  <div class="sb" id="sbEl">
-    <div class="sb-top">
-      <div class="sb-brand">Akademi<span>Pro</span></div>
-      <div class="u-row">
-        <div class="u-av" id="uAv">RK</div>
-        <div><div class="u-name" id="uName">Rina</div><div class="u-course" id="uCourse">UI/UX Bootcamp</div></div>
-      </div>
-    </div>
-    <div class="prog-sec">
-      <div class="prog-lbl"><span>Progress</span><span id="progTxt">0/0</span></div>
-      <div class="prog-bg"><div class="prog-fill" id="progBar" style="width:0%"></div></div>
-    </div>
-    <div class="m-list" id="mList"></div>
-    <div class="sb-bot">
-      <div class="exp-b"><strong id="expDate">Akses aktif</strong>Selamat belajar!</div>
-    </div>
+  <div class="sb">
+    <div class="sb-logo">Akademi<span>Pro</span><small>Admin Panel</small></div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="ic">📊</span>Dashboard</div>
+    <div class="nav-item" onclick="showPage('pendaftar',this)"><span class="ic">👥</span>Pendaftar</div>
+    <div class="nav-item" onclick="showPage('kursus',this)"><span class="ic">📚</span>Kelola Kursus</div>
+    <div class="nav-item" onclick="showPage('materi',this)"><span class="ic">✏️</span>Edit Materi</div>
+    <div class="sb-foot"><strong id="adName">Admin</strong>Logged in</div>
   </div>
+
   <div class="main">
     <div class="topbar">
-      <div style="display:flex;align-items:center;gap:12px">
-        <button class="hbg" onclick="toggleSb()">☰</button>
-        <div class="tb-bc"><strong id="tbTitle">Modul</strong></div>
-      </div>
+      <div class="tb-title" id="pageTitle">Dashboard</div>
       <button class="lo-btn" onclick="doLogout()">Keluar</button>
     </div>
-    <div class="ca" id="ca"></div>
+
+    <!-- DASHBOARD -->
+    <div class="page on" id="pgDashboard">
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-lbl">Total Pendaftar</div><div class="stat-val" id="stTotal">0</div><div class="stat-sub">Semua waktu</div></div>
+        <div class="stat warn"><div class="stat-lbl">Menunggu Verifikasi</div><div class="stat-val" id="stPend">0</div><div class="stat-sub">Perlu ditinjau</div></div>
+        <div class="stat ok"><div class="stat-lbl">Sudah Verified</div><div class="stat-val" id="stVerif">0</div><div class="stat-sub">Akses aktif</div></div>
+        <div class="stat acc"><div class="stat-lbl">Pendapatan Bulan Ini</div><div class="stat-val" id="stRev">Rp 0</div><div class="stat-sub" id="stRevSub">—</div></div>
+      </div>
+      <div class="sec-head"><div class="sec-title">Pendaftar Terbaru</div><a href="#" onclick="showPage('pendaftar',null)" style="font-size:13px;color:var(--brand)">Lihat Semua →</a></div>
+      <div class="tbl"><div class="th"><div>Nama / Email</div><div>Kursus</div><div>Tanggal</div><div>Nominal</div><div>Status</div><div>Aksi</div></div><div id="tblRecent"></div></div>
+    </div>
+
+    <!-- PENDAFTAR -->
+    <div class="page" id="pgPendaftar">
+      <div class="sec-head">
+        <div class="sec-title">Semua Pendaftar</div>
+        <div class="filters">
+          <input type="text" id="srch" placeholder="Cari nama / email..." oninput="filterTbl()">
+          <select id="fSt" onchange="filterTbl()"><option value="">Semua Status</option><option value="pending">Menunggu</option><option value="verified">Verified</option><option value="rejected">Ditolak</option></select>
+          <select id="fKr" onchange="filterTbl()"><option value="">Semua Kursus</option></select>
+          <button class="btn-act" onclick="exportCSV()">Export CSV</button>
+        </div>
+      </div>
+      <div class="tbl"><div class="th"><div>Nama / Email</div><div>Kursus</div><div>Tanggal</div><div>Nominal</div><div>Status</div><div>Aksi</div></div><div id="tblAll"></div></div>
+    </div>
+
+    <!-- KURSUS -->
+    <div class="page" id="pgKursus">
+      <div class="sec-head"><div class="sec-title">Kelola Kursus</div><button class="btn-act" onclick="showToast('Tambah via Google Sheets — tab Kursus')">+ Tambah Kursus</button></div>
+      <div class="k-grid" id="kGrid"></div>
+    </div>
+
+    <!-- MATERI EDITOR -->
+    <div class="page" id="pgMateri">
+      <div class="sec-head" style="margin-bottom:16px">
+        <div class="sec-title">Edit Materi Kursus</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <select id="selKursus" onchange="loadMateriKursus()" style="padding:7px 12px;border:1px solid var(--br);border-radius:var(--rs);font-size:13px;font-family:var(--fb);background:var(--wh);color:var(--tx);outline:none"></select>
+        </div>
+      </div>
+      <div class="materi-layout">
+        <div class="materi-sb">
+          <div class="msb-head"><div class="msb-title">Daftar Modul</div><button class="btn-add-mod" onclick="addModul()">+ Modul</button></div>
+          <div id="modulSb"></div>
+        </div>
+        <div id="materiForm"><div style="padding:40px;text-align:center;color:var(--txl);font-size:13px">Pilih modul untuk mulai edit</div></div>
+      </div>
+    </div>
   </div>
 </div>
+
+<!-- MODAL VERIFIKASI -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div class="modal-title">Detail Pembayaran <button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div id="modalBody"></div>
+    <div class="m-actions">
+      <button class="btn-reject" onclick="updateStatus('rejected')">Tolak</button>
+      <button class="btn-verify" onclick="updateStatus('verified')">✓ Verifikasi & Kirim Akses</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-const CFG = {
-  demoEmail: 'demo@akademi.id',
-  demoToken: 'DEMO2025',
-  scriptUrl: 'https://script.google.com/macros/s/AKfycbyd06IWe5CREEZ5l1MnG5X41DUlTQV-ZwSXp5dbUrbiJZVlbhnxFSfKdfgsT59Y1NebcQ/exec'
-};
+const CFG={adminUser:'admin',adminPass:'admin123',scriptUrl:'https://script.google.com/macros/s/AKfycbyd06IWe5CREEZ5l1MnG5X41DUlTQV-ZwSXp5dbUrbiJZVlbhnxFSfKdfgsT59Y1NebcQ/exec'};
 
-// ================================================================
-// FETCH HELPERS (sama seperti admin.html)
-// ================================================================
-async function apiFetch(params) {
-  const url = CFG.scriptUrl + '?' + new URLSearchParams(params);
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-  return res.json();
-}
-
-async function apiPost(body) {
-  const res = await fetch(CFG.scriptUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-  return res.json();
-}
-
-// ================================================================
-// STATE
-// ================================================================
-let curMod = 0, curTab = 'video', progress = [], QS = {};
-let currentUser = null;
-let currentMods = [];
-
-// Demo data sebagai fallback
-const DEMO_MODS = [
- {id:1,title:'Pengantar UI/UX Design',dur:'24 min',sec:'Dasar-Dasar',
-  video:{url:'https://www.youtube.com/embed/dQw4w9WgXcQ',cap:'Pengantar UI/UX — 24:37'},
-  pdf:{nama:'Slide Modul 1.pdf',url:'#',size:'2.4 MB',hal:18},
-  teks:`<h3>Apa itu UI/UX Design?</h3><p><strong>UI (User Interface)</strong> adalah tampilan visual produk digital. <strong>UX (User Experience)</strong> adalah keseluruhan pengalaman pengguna.</p>`,
-  quiz:[{q:'Apa kepanjangan dari UX?',opts:['User Xperience','User Experience','Ultra Experience','Unique Experience'],ans:1,exp:'UX = User Experience.'}]},
- {id:2,title:'Design Thinking',dur:'31 min',sec:'Dasar-Dasar',locked:true,
-  video:{url:'',cap:''},pdf:{nama:'',url:'',size:'',hal:0},teks:'',quiz:[]},
+/* ======= DATA ======= */
+let allData=[
+ {id:'R001',nama:'Rina Kusuma',email:'rina@gmail.com',wa:'081234567890',kota:'Jakarta',kursus:'UI/UX Design Bootcamp',tanggal:'11 Jun 2025',nominal:'Rp 299.142',status:'pending',sumber:'Instagram'},
+ {id:'R002',nama:'Dodi Pratama',email:'dodi@email.com',wa:'082345678901',kota:'Bandung',kursus:'Digital Marketing Pro',tanggal:'10 Jun 2025',nominal:'Rp 249.073',status:'verified',sumber:'Teman'},
+ {id:'R003',nama:'Sari Indah',email:'sari@gmail.com',wa:'083456789012',kota:'Surabaya',kursus:'Data Analytics',tanggal:'10 Jun 2025',nominal:'Rp 399.221',status:'verified',sumber:'Google'},
+ {id:'R004',nama:'Budi Santoso',email:'budi@email.com',wa:'084567890123',kota:'Yogyakarta',kursus:'UI/UX Design Bootcamp',tanggal:'09 Jun 2025',nominal:'Rp 299.055',status:'pending',sumber:'YouTube'},
+ {id:'R005',nama:'Maya Putri',email:'maya@gmail.com',wa:'085678901234',kota:'Medan',kursus:'Data Analytics',tanggal:'08 Jun 2025',nominal:'Rp 399.183',status:'rejected',sumber:'Instagram'},
+ {id:'R006',nama:'Andi Wijaya',email:'andi@email.com',wa:'086789012345',kota:'Makassar',kursus:'Digital Marketing Pro',tanggal:'07 Jun 2025',nominal:'Rp 249.011',status:'verified',sumber:'Facebook'},
 ];
 
-// ================================================================
-// LOGIN
-// ================================================================
-async function doLogin() {
-  const email = document.getElementById('lemail').value.trim().toLowerCase();
-  const token = document.getElementById('ltoken').value.trim().toUpperCase();
-  
-  // Demo account
-  if (email === CFG.demoEmail && token === CFG.demoToken) {
-    initAppWithData({
-      nama: 'Rina Kusuma',
-      email: email,
-      kursus: 'UI/UX Design Bootcamp',
-      expDate: '31 Des 2025',
-      progress: [true, false, false, false, false]
-    }, DEMO_MODS);
-    return;
-  }
-  
-  showToast('⏳ Memeriksa akses...');
-  
-  try {
-    // Cek akses ke server
-    const result = await apiFetch({ action: 'checkAccess', email: email, token: token });
-    
-    if (result && result.valid && result.user) {
-      const user = result.user;
-      
-      // Load materi untuk kursus ini
-      const materiData = await apiFetch({ action: 'getMateri', kursusId: user.kursusId });
-      
-      if (materiData && materiData.materi && materiData.materi.length) {
-        const serverMods = materiData.materi.map(mod => ({
-          id: mod.id,
-          title: mod.judul,
-          dur: mod.durasi + ' min',
-          sec: mod.section || 'Modul',
-          locked: mod.terkunci || false,
-          video: { url: mod.videoUrl || '', cap: mod.judul },
-          pdf: { 
-            nama: mod.pdfUrl ? 'Materi ' + mod.judul + '.pdf' : '', 
-            url: mod.pdfUrl || '#', 
-            size: '1 MB', 
-            hal: 10 
-          },
-          teks: mod.teks || '<p>Konten sedang disiapkan.</p>',
-          quiz: mod.quiz || []
-        }));
-        
-        initAppWithData({
-          nama: user.nama,
-          email: user.email,
-          kursus: user.kursus,
-          expDate: user.expDate,
-          progress: user.progress || []
-        }, serverMods);
-      } else {
-        initAppWithData({
-          nama: user.nama,
-          email: user.email,
-          kursus: user.kursus,
-          expDate: user.expDate,
-          progress: []
-        }, DEMO_MODS);
-      }
-    } else {
-      document.getElementById('lerr').style.display = 'block';
-      if (result && result.reason === 'expired') {
-        document.getElementById('lerr').textContent = 'Akses sudah kadaluarsa. Hubungi admin.';
-      }
-    }
-  } catch (err) {
-    console.error('Login error:', err);
-    showToast('Gagal koneksi ke server: ' + err.message);
-  }
-}
+const KURSUS_DATA=[
+ {id:'C001',emoji:'🎨',nama:'UI/UX Design Bootcamp',kategori:'Design',modul:10,akses:'3 bulan',harga:'Rp 299.000',pendaftar:48},
+ {id:'C002',emoji:'📣',nama:'Digital Marketing Pro',kategori:'Marketing',modul:8,akses:'3 bulan',harga:'Rp 249.000',pendaftar:35},
+ {id:'C003',emoji:'📊',nama:'Data Analytics',kategori:'Data',modul:12,akses:'6 bulan',harga:'Rp 399.000',pendaftar:61},
+ {id:'C004',emoji:'💻',nama:'Web Dev Full Stack',kategori:'Programming',modul:15,akses:'6 bulan',harga:'Rp 499.000',pendaftar:29},
+];
 
-function initAppWithData(user, mods) {
-  currentUser = user;
-  currentMods = mods;
-  
-  // Inisialisasi progress
-  if (user.progress && user.progress.length > 0) {
-    progress = user.progress;
-  } else {
-    progress = new Array(mods.length).fill(false);
-    progress[0] = true;
-  }
-  
-  // Set locked status
-  currentMods.forEach((mod, idx) => {
-    if (idx > 0 && !progress[idx-1]) {
-      mod.locked = true;
-    } else {
-      mod.locked = false;
-    }
-  });
-  
-  // Load quiz state dari localStorage
-  QS = {};
-  const savedQS = localStorage.getItem('quiz_state_' + user.email);
-  if (savedQS) {
-    try { Object.assign(QS, JSON.parse(savedQS)); } catch(e) {}
-  }
-  
-  document.getElementById('lw').style.display = 'none';
+/* Data materi — tersimpan dalam memory, di produk nyata sync ke Google Sheets */
+let MATERI_DATA={
+ 'C001':[
+  {id:1,judul:'Pengantar UI/UX Design',section:'Dasar-Dasar',durasi:'24',videoUrl:'https://www.youtube.com/embed/dQw4w9WgXcQ',pdfUrl:'https://drive.google.com/file/d/EXAMPLE/view',teks:'Teks konten modul 1...',terkunci:false,
+   quiz:[{q:'Apa kepanjangan UX?',opts:['User Xperience','User Experience','Ultra Experience','Unique Experience'],ans:1,exp:'UX = User Experience.'},{q:'Elemen apa yang termasuk UI?',opts:['Alur navigasi','Loading speed','Warna tombol','Kepuasan user'],ans:2,exp:'UI mencakup elemen visual.'}]},
+  {id:2,judul:'Design Thinking',section:'Dasar-Dasar',durasi:'31',videoUrl:'',pdfUrl:'',teks:'Teks konten modul 2...',terkunci:false,
+   quiz:[{q:'Berapa tahap Design Thinking?',opts:['3','4','5','6'],ans:2,exp:'Ada 5 tahap.'},{q:'Tahap pertama adalah?',opts:['Define','Prototype','Ideate','Empathize'],ans:3,exp:'Empathize adalah tahap pertama.'}]},
+  {id:3,judul:'User Research',section:'Riset',durasi:'42',videoUrl:'',pdfUrl:'',teks:'Teks konten modul 3...',terkunci:false,quiz:[]},
+  {id:4,judul:'Wireframing',section:'Riset',durasi:'55',videoUrl:'',pdfUrl:'',teks:'',terkunci:false,quiz:[]},
+  {id:5,judul:'Prototyping',section:'Design',durasi:'48',videoUrl:'',pdfUrl:'',teks:'',terkunci:false,quiz:[]},
+ ],
+ 'C002':[
+  {id:1,judul:'Pengantar Digital Marketing',section:'Dasar',durasi:'20',videoUrl:'',pdfUrl:'',teks:'',terkunci:false,quiz:[]},
+  {id:2,judul:'SEO Fundamentals',section:'Dasar',durasi:'35',videoUrl:'',pdfUrl:'',teks:'',terkunci:false,quiz:[]},
+  {id:3,judul:'Meta Ads',section:'Advertising',durasi:'45',videoUrl:'',pdfUrl:'',teks:'',terkunci:false,quiz:[]},
+ ],
+};
+
+let curId=null,curKursus='C001',curModIdx=0;
+
+/* ======= LOGIN ======= */
+function doLogin(){
+ if(document.getElementById('lu').value===CFG.adminUser&&document.getElementById('lp').value===CFG.adminPass){
+  document.getElementById('lw').style.display='none';
   document.getElementById('appEl').classList.add('on');
-  
-  const ini = user.nama.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
-  document.getElementById('uAv').textContent = ini;
-  document.getElementById('uName').textContent = user.nama;
-  document.getElementById('uCourse').textContent = user.kursus;
-  document.getElementById('expDate').textContent = 's.d. ' + user.expDate;
-  
-  updateProg();
-  renderSb();
-  loadMod(0);
+  document.getElementById('adName').textContent=CFG.adminUser.charAt(0).toUpperCase()+CFG.adminUser.slice(1);
+  renderAll();
+ } else {document.getElementById('lerr').style.display='block';}
+}
+function doLogout(){document.getElementById('appEl').classList.remove('on');document.getElementById('lw').style.display='flex';document.getElementById('lp').value='';}
+
+/* ======= RENDER ======= */
+function renderAll(){renderStats();renderTblRecent();renderTblAll(allData);renderKursus();renderMateriSelects();}
+
+function renderStats(){
+ const tot=allData.length,pend=allData.filter(d=>d.status==='pending').length,verif=allData.filter(d=>d.status==='verified').length;
+ const rev=allData.filter(d=>d.status==='verified').reduce((s,d)=>s+parseInt(d.nominal.replace(/\D/g,'')),0);
+ document.getElementById('stTotal').textContent=tot;
+ document.getElementById('stPend').textContent=pend;
+ document.getElementById('stVerif').textContent=verif;
+ document.getElementById('stRev').textContent='Rp '+(rev/1e6).toFixed(1)+'jt';
 }
 
-function doLogout() {
-  document.getElementById('appEl').classList.remove('on');
-  document.getElementById('lw').style.display = 'flex';
-  document.getElementById('ltoken').value = '';
-  currentUser = null;
-  currentMods = [];
-  progress = [];
-  QS = {};
+function renderRow(d){
+ const bc=d.status==='pending'?'pending':d.status==='verified'?'verified':'rejected';
+ const bt=d.status==='pending'?'Menunggu':d.status==='verified'?'Verified':'Ditolak';
+ const ab=d.status==='pending'?`<button class="abtn rev" onclick="openModal('${d.id}')">Tinjau</button>`:`<button class="abtn done" disabled>Selesai</button>`;
+ return `<div class="tr" id="row_${d.id}"><div><div class="nm">${d.nama}</div><div class="em">${d.email}</div></div><div style="font-size:12px;color:var(--txm)">${d.kursus}</div><div style="font-size:12px;color:var(--txl)">${d.tanggal}</div><div style="font-size:13px;font-weight:600">${d.nominal}</div><div><span class="bdg ${bc}">${bt}</span></div><div>${ab}</div></div>`;
 }
+function renderTblRecent(){document.getElementById('tblRecent').innerHTML=allData.slice(0,5).map(renderRow).join('');}
+function renderTblAll(data){document.getElementById('tblAll').innerHTML=data.length?data.map(renderRow).join(''):`<div style="padding:28px;text-align:center;color:var(--txl);font-size:13px">Tidak ada data</div>`;}
 
-// ================================================================
-// RENDER FUNCTIONS (menggunakan currentMods)
-// ================================================================
-function updateProg() {
-  const d = progress.filter(Boolean).length;
-  const t = progress.length;
-  document.getElementById('progTxt').textContent = d + '/' + t + ' modul';
-  document.getElementById('progBar').style.width = Math.round(d / t * 100) + '%';
-}
-
-function renderSb() {
-  let sec = '', html = '';
-  const mods = currentMods;
-  
-  mods.forEach((m, i) => {
-    if (m.sec !== sec) {
-      sec = m.sec;
-      html += `<div class="m-sec-lbl">${m.sec}</div>`;
-    }
-    const done = progress[i] && !m.locked;
-    const qp = QS[i] && QS[i].passed;
-    const active = i === curMod;
-    const ic = m.locked ? '🔒' : done ? (qp ? '★' : '✓') : (i + 1);
-    
-    html += `<div class="m-item${active ? ' active' : ''}${done ? ' done' : ''}${m.locked ? ' locked' : ''}" onclick="loadMod(${i})">
-      <div class="m-ic">${ic}</div>
-      <div class="m-txt">
-        <div class="m-title">${m.title}</div>
-        <div class="m-dur">${m.dur}${m.quiz && m.quiz.length ? ' · ' + m.quiz.length + ' soal' : ''}</div>
-      </div>
-    </div>`;
-  });
-  
-  document.getElementById('mList').innerHTML = html;
-}
-
-function loadMod(i) {
-  const mods = currentMods;
-  if (mods[i].locked) {
-    showToast('🔒 Selesaikan modul sebelumnya dulu');
-    return;
-  }
-  curMod = i;
-  curTab = 'video';
-  document.getElementById('tbTitle').textContent = 'Modul ' + mods[i].id + ': ' + mods[i].title;
-  renderSb();
-  renderContent();
-  document.getElementById('ca').scrollTop = 0;
-  if (window.innerWidth < 769) document.getElementById('sbEl').classList.remove('open');
-}
-
-function renderContent() {
-  const mods = currentMods;
-  const m = mods[curMod];
-  const done = progress[curMod];
-  const qs = QS[curMod] || {};
-  const qUnlock = done;
-  const qPassed = qs.passed;
-  const qBadge = qPassed ? '<span class="badge ok">✓ Lulus</span>' : (qs.attempts ? '<span class="badge">Belum lulus</span>' : '');
-  const doneBadge = done ? `<div class="done-badge">✓ <span>Materi selesai${qPassed ? ' · Kuis lulus' : ' — ambil kuis untuk lanjut'}</span></div>` : '';
-  const qStyle = !qUnlock ? 'opacity:.45;cursor:not-allowed' : '';
-  
-  document.getElementById('ca').innerHTML = `
-    <div style="margin-bottom:20px">
-      <div class="mod-num">Modul ${m.id} dari ${mods.length}</div>
-      <div class="mod-title">${m.title}</div>
-      <div class="mod-meta"><span>⏱ ${m.dur}</span><span>📁 ${m.sec}</span>${m.quiz && m.quiz.length ? `<span>🎯 ${m.quiz.length} soal kuis</span>` : ''}</div>
+function renderKursus(){
+ document.getElementById('kGrid').innerHTML=KURSUS_DATA.map(c=>`
+  <div class="k-card">
+   <div class="k-head"><div class="k-emoji">${c.emoji}</div><div class="k-info"><div class="k-name">${c.nama}</div><div class="k-meta">${c.kategori} · ${c.modul} modul · ${c.akses}</div><div class="k-price">${c.harga}</div></div></div>
+   <div class="k-body">
+    <div class="k-stat-row"><span>Pendaftar</span><span class="k-stat-val">${c.pendaftar} siswa</span></div>
+    <div class="k-stat-row"><span>Materi</span><span class="k-stat-val">${(MATERI_DATA[c.id]||[]).length} modul diisi</span></div>
+    <div class="k-actions">
+     <button class="btn-edit-k" onclick="showToast('Edit info kursus di Google Sheets — tab Kursus')">Edit Info</button>
+     <button class="btn-materi" onclick="goToMateri('${c.id}')">Edit Materi →</button>
     </div>
-    ${doneBadge}
-    <div class="ctabs">
-      <button class="ctab${curTab === 'video' ? ' active' : ''}" onclick="switchTab('video')">▶ Video</button>
-      <button class="ctab${curTab === 'pdf' ? ' active' : ''}" onclick="switchTab('pdf')">📄 PDF</button>
-      <button class="ctab${curTab === 'teks' ? ' active' : ''}" onclick="switchTab('teks')">📝 Teks</button>
-      ${m.quiz && m.quiz.length ? `<button class="ctab qa${curTab === 'quiz' ? ' active' : ''}" style="${qStyle}" onclick="${qUnlock ? "switchTab('quiz')" : "showToast('Tandai materi selesai dulu')"}">🎯 Kuis ${qBadge}</button>` : ''}
+   </div>
+  </div>`).join('');
+}
+
+function renderMateriSelects(){
+ const sel=document.getElementById('selKursus');
+ sel.innerHTML=KURSUS_DATA.map(c=>`<option value="${c.id}">${c.nama}</option>`).join('');
+ sel.value=curKursus;
+ renderMateriSb();
+}
+
+/* ======= MATERI EDITOR ======= */
+function goToMateri(kursusId){
+ curKursus=kursusId;
+ showPage('materi',null);
+ document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+ document.querySelector('.nav-item:nth-child(5)').classList.add('active');
+ document.getElementById('pageTitle').textContent='Edit Materi';
+ document.getElementById('selKursus').value=kursusId;
+ curModIdx=0;
+ renderMateriSb();
+ if((MATERI_DATA[kursusId]||[]).length>0)renderMateriForm(0);
+}
+
+function loadMateriKursus(){
+ curKursus=document.getElementById('selKursus').value;
+ curModIdx=0;renderMateriSb();
+ if((MATERI_DATA[curKursus]||[]).length>0)renderMateriForm(0);
+ else document.getElementById('materiForm').innerHTML=`<div style="padding:40px;text-align:center;color:var(--txl);font-size:13px">Belum ada modul. Klik "+ Modul" untuk menambah.</div>`;
+}
+
+function renderMateriSb(){
+ const mods=MATERI_DATA[curKursus]||[];
+ document.getElementById('modulSb').innerHTML=mods.length
+  ?mods.map((m,i)=>`
+   <div class="mod-row${i===curModIdx?' active':''}" onclick="selectMod(${i})">
+    <div class="mod-num-badge">${m.id}</div>
+    <div class="mod-row-title">${m.judul||'Modul tanpa judul'}</div>
+    ${m.quiz&&m.quiz.length?`<span style="font-size:10px;background:var(--bl);color:var(--brand);padding:1px 6px;border-radius:10px;font-weight:700">${m.quiz.length}Q</span>`:''}
+    <button class="mod-row-del" onclick="event.stopPropagation();delMod(${i})" title="Hapus">✕</button>
+   </div>`).join('')
+  :`<div style="padding:20px;text-align:center;color:var(--txl);font-size:12px">Belum ada modul</div>`;
+}
+
+function selectMod(i){curModIdx=i;renderMateriSb();renderMateriForm(i);}
+
+function renderMateriForm(i){
+ const mods=MATERI_DATA[curKursus]||[];
+ if(!mods[i]){return;}
+ const m=mods[i];
+ const quizHtml=renderQuizEditor(m.quiz||[]);
+ document.getElementById('materiForm').innerHTML=`
+  <div class="materi-form">
+   <div class="form-title-ed">
+    <span>Edit Modul ${m.id}: ${m.judul||'—'}</span>
+    <span style="font-size:11px;color:var(--txl);font-weight:400">${KURSUS_DATA.find(k=>k.id===curKursus)?.nama||''}</span>
+   </div>
+   <div class="fg-row2">
+    <div class="fg"><label>Judul Modul <span>*</span></label><input type="text" id="fJudul" value="${m.judul||''}"></div>
+    <div class="fg"><label>Section / Bab</label><input type="text" id="fSection" value="${m.section||''}"></div>
+   </div>
+   <div class="fg-row2">
+    <div class="fg"><label>Durasi (menit)</label><input type="number" id="fDurasi" value="${m.durasi||''}" min="1"></div>
+    <div class="fg"><label>Status Modul</label>
+     <select id="fLocked"><option value="false" ${!m.terkunci?'selected':''}>Terbuka (siswa bisa akses)</option><option value="true" ${m.terkunci?'selected':''}>Terkunci (belum tersedia)</option></select>
     </div>
-    <div id="tabBody"></div>
-    <div class="cnav">
-      <button class="btn-prev" onclick="prevMod()" ${curMod === 0 ? 'disabled' : ''}>← Sebelumnya</button>
-      ${!done ? `<button class="btn-mark" onclick="markDone()">Tandai Selesai →</button>` : `<button class="btn-mark" onclick="nextMod()" ${curMod === mods.length - 1 ? 'disabled' : ''}>Modul Berikutnya →</button>`}
-    </div>
-  `;
-  renderTab();
+   </div>
+   <div class="fg"><label>URL Video (YouTube Embed)</label>
+    <input type="url" id="fVideo" value="${m.videoUrl||''}" placeholder="https://www.youtube.com/embed/VIDEO_ID">
+    <div class="fg-hint">Ubah URL /watch?v=ID → /embed/ID dari YouTube</div>
+   </div>
+   <div class="fg"><label>URL PDF / File Materi (Google Drive)</label>
+    <input type="url" id="fPdf" value="${m.pdfUrl||''}" placeholder="https://drive.google.com/file/d/FILE_ID/view">
+    <div class="fg-hint">Share file Google Drive → "Anyone with link" → salin URL</div>
+   </div>
+   <div class="fg"><label>Konten Teks (HTML sederhana diperbolehkan)</label>
+    <textarea id="fTeks" placeholder="Tulis konten teks modul ini... Bisa pakai &lt;h3&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;strong&gt;">${m.teks||''}</textarea>
+   </div>
+   <div class="quiz-editor">
+    <div class="qe-title"><span>Soal Kuis (${(m.quiz||[]).length} soal)</span><button class="btn-add-q" onclick="addSoal()">+ Tambah Soal</button></div>
+    <div id="quizEditorBody">${quizHtml}</div>
+   </div>
+   <div class="form-actions">
+    <button class="btn-save" onclick="saveMateri()">Simpan Materi</button>
+    <button class="btn-cancel" onclick="selectMod(${i})">Reset</button>
+    <div class="save-ok" id="saveOk">✓ Tersimpan!</div>
+   </div>
+  </div>`;
 }
 
-function renderTab() {
-  const mods = currentMods;
-  const m = mods[curMod];
-  const body = document.getElementById('tabBody');
-  
-  if (curTab === 'video') {
-    const vEl = m.video.url ? `<iframe src="${m.video.url}" allowfullscreen></iframe>` : `<div class="vid-ph"><div class="play-c">▶</div><div style="font-size:14px;opacity:.85">${m.video.cap || 'Video tersedia di sistem penuh'}</div></div>`;
-    body.innerHTML = `<div class="vid-wrap">${vEl}</div><div class="vid-note">📌 Link video dikelola admin via Google Sheets.</div>`;
-  } else if (curTab === 'pdf') {
-    body.innerHTML = m.pdf.nama ? `<div class="pdf-card"><div class="pdf-ic">PDF</div><div class="pdf-info"><div class="pdf-name">${m.pdf.nama}</div><div class="pdf-meta">${m.pdf.size} · ${m.pdf.hal} hal.</div></div><a href="${m.pdf.url || '#'}" class="btn-dl" target="_blank">Download</a></div>` : `<div style="padding:32px;text-align:center;color:var(--txl);font-size:13px">Belum ada PDF.</div>`;
-  } else if (curTab === 'teks') {
-    body.innerHTML = m.teks ? `<div class="teks">${m.teks}</div>` : `<div style="padding:32px;text-align:center;color:var(--txl);font-size:13px">Konten teks belum tersedia.</div>`;
-  } else if (curTab === 'quiz') {
-    renderQuiz();
-  }
+function renderQuizEditor(quiz){
+ if(!quiz.length)return`<div style="padding:16px;text-align:center;color:var(--txl);font-size:12px;border:1px dashed var(--br);border-radius:var(--rs)">Belum ada soal kuis. Klik "+ Tambah Soal" untuk menambah.</div>`;
+ const L=['A','B','C','D'];
+ return quiz.map((q,qi)=>`
+  <div class="qe-item" id="qei${qi}">
+   <div class="qe-num">Soal ${qi+1}</div>
+   <button class="qe-del" onclick="delSoal(${qi})">✕</button>
+   <div class="fg"><label>Pertanyaan</label><input type="text" id="qq${qi}" value="${q.q||''}" placeholder="Tulis pertanyaan di sini..."></div>
+   <div class="qe-opts">${q.opts.map((o,oi)=>`<div class="qe-opt-row"><span class="qe-opt-lbl">${L[oi]}</span><input type="text" id="qo${qi}_${oi}" value="${o||''}" placeholder="Opsi ${L[oi]}"></div>`).join('')}</div>
+   <div class="ans-row">Jawaban benar:
+    <select id="qa${qi}">
+     ${L.map((l,li)=>`<option value="${li}" ${q.ans===li?'selected':''}>${l}. ${q.opts[li]||'Opsi '+l}</option>`).join('')}
+    </select>
+   </div>
+   <div class="expl-row"><div class="fg"><label>Penjelasan jawaban (opsional)</label><textarea id="qe${qi}" placeholder="Jelaskan mengapa jawaban ini benar...">${q.exp||''}</textarea></div></div>
+  </div>`).join('');
 }
 
-function switchTab(t) { curTab = t; renderContent(); }
-
-// ================================================================
-// QUIZ ENGINE
-// ================================================================
-function renderQuiz() {
-  const mods = currentMods;
-  const m = mods[curMod];
-  const qs = QS[curMod] || {};
-  const body = document.getElementById('tabBody');
-  
-  if (!m.quiz || !m.quiz.length) {
-    body.innerHTML = `<div style="padding:32px;text-align:center;color:var(--txl);font-size:13px">Belum ada kuis.</div>`;
-    return;
-  }
-  if (qs.showResult) {
-    renderResult(body, m, qs);
-    return;
-  }
-  
-  const qi = qs.current || 0;
-  const q = m.quiz[qi];
-  const pct = Math.round(qi / m.quiz.length * 100);
-  const L = ['A', 'B', 'C', 'D'];
-  
-  body.innerHTML = `
-    <div class="qwrap">
-      <div class="qhdr"><div class="qtitle">Kuis: ${m.title}</div><div class="qsub">${m.quiz.length} soal · Minimal 70% untuk lulus</div></div>
-      <div class="qctr"><span>Soal ${qi + 1} / ${m.quiz.length}</span><span>Benar: <strong id="qsc">${qs.correct || 0}</strong></span></div>
-      <div class="qprog-bg"><div class="qprog-fill" style="width:${pct}%"></div></div>
-      <div style="margin-bottom:14px"></div>
-      <div class="qcard">
-        <div class="qnum">Soal ${qi + 1}</div>
-        <div class="qtext">${q.q}</div>
-        <div class="qopts" id="qOpts">${q.opts.map((o, i) => `<button class="qopt" id="qo${i}" onclick="ansQ(${i})"><span class="qltr">${L[i]}</span>${o}</button>`).join('')}</div>
-        <div class="qfb" id="qfb"></div>
-      </div>
-      <div class="qnav">
-        <span style="font-size:12px;color:var(--txl)">Percobaan ke-${(qs.attempts || 0) + 1}</span>
-        <button class="btn-qnext" id="btnNext" onclick="nextQ()" disabled>Lanjut →</button>
-      </div>
-    </div>`;
+function getCurrentQuiz(){
+ const mods=MATERI_DATA[curKursus]||[];
+ return (mods[curModIdx]||{}).quiz||[];
 }
 
-function ansQ(idx) {
-  const mods = currentMods;
-  const m = mods[curMod];
-  const qs = QS[curMod] || { current: 0, correct: 0, answers: [] };
-  const qi = qs.current || 0;
-  const q = m.quiz[qi];
-  const ok = idx === q.ans;
-  
-  document.querySelectorAll('.qopt').forEach(b => b.disabled = true);
-  document.getElementById('qo' + idx).classList.add(ok ? 'correct' : 'wrong');
-  document.getElementById('qo' + idx).querySelector('.qltr').textContent = ok ? '✓' : '✗';
-  
-  if (!ok) {
-    document.getElementById('qo' + q.ans).classList.add('missed');
-    document.getElementById('qo' + q.ans).querySelector('.qltr').textContent = '✓';
-  }
-  
-  const fb = document.getElementById('qfb');
-  fb.className = 'qfb show ' + (ok ? 'ok' : 'err');
-  fb.innerHTML = (ok ? '✓ Benar! ' : '✗ Kurang tepat. ') + q.exp;
-  
-  const nc = (qs.correct || 0) + (ok ? 1 : 0);
-  QS[curMod] = { ...qs, correct: nc, answers: [...(qs.answers || []), { qi, idx, ok }] };
-  document.getElementById('qsc').textContent = nc;
-  
-  const btnNext = document.getElementById('btnNext');
-  btnNext.disabled = false;
-  btnNext.textContent = qi === m.quiz.length - 1 ? 'Lihat Hasil →' : 'Lanjut →';
+function addSoal(){
+ const mods=MATERI_DATA[curKursus]||[];
+ if(!mods[curModIdx])return;
+ mods[curModIdx].quiz.push({q:'',opts:['','','',''],ans:0,exp:''});
+ document.getElementById('quizEditorBody').innerHTML=renderQuizEditor(mods[curModIdx].quiz);
 }
 
-async function nextQ() {
-  const mods = currentMods;
-  const m = mods[curMod];
-  const qs = QS[curMod] || {};
-  const qi = (qs.current || 0) + 1;
-  
-  if (qi >= m.quiz.length) {
-    const pct = Math.round((qs.correct || 0) / m.quiz.length * 100);
-    const passed = pct >= 70;
-    
-    QS[curMod] = {
-      ...qs,
-      showResult: true,
-      pct: pct,
-      passed: passed,
-      attempts: (qs.attempts || 0) + 1
-    };
-    
-    if (passed) {
-      progress[curMod] = true;
-      if (curMod + 1 < currentMods.length) {
-        currentMods[curMod + 1].locked = false;
-      }
-      updateProg();
-      
-      // Simpan progress ke server
-      if (currentUser && currentUser.email) {
-        try {
-          await apiPost({
-            action: 'updateProgress',
-            email: currentUser.email,
-            moduleId: curMod + 1,
-            actionType: 'complete',
-            quizScore: pct
-          });
-        } catch(e) { console.error('Save progress error:', e); }
-      }
-    }
-    
-    // Simpan ke localStorage
-    if (currentUser) {
-      localStorage.setItem('quiz_state_' + currentUser.email, JSON.stringify(QS));
-      localStorage.setItem('progress_' + currentUser.email, JSON.stringify(progress));
-    }
-    
-    renderContent();
-  } else {
-    QS[curMod] = { ...qs, current: qi };
-    renderContent();
-  }
+function delSoal(qi){
+ const mods=MATERI_DATA[curKursus]||[];
+ if(!mods[curModIdx])return;
+ if(!confirm('Hapus soal ini?'))return;
+ mods[curModIdx].quiz.splice(qi,1);
+ document.getElementById('quizEditorBody').innerHTML=renderQuizEditor(mods[curModIdx].quiz);
 }
 
-function renderResult(body, m, qs) {
-  const pass = qs.passed;
-  body.innerHTML = `
-    <div class="qwrap"><div class="qresult">
-      <div class="sring ${pass ? 'pass' : 'fail'}"><div class="spct">${qs.pct}%</div><div class="slbl">skor</div></div>
-      <div class="rtitle">${pass ? 'Selamat, Kamu Lulus! 🎉' : 'Belum Lulus — Coba Lagi'}</div>
-      <div class="rsub">${pass ? 'Kamu lulus kuis modul ini. Lanjutkan ke modul berikutnya!' : 'Perlu minimal 70%. Pelajari ulang materinya dan coba lagi.'}</div>
-      <div class="sdetail">
-        <div class="sitem c"><strong>${qs.correct}</strong><span>Benar</span></div>
-        <div class="sitem w"><strong>${m.quiz.length - qs.correct}</strong><span>Salah</span></div>
-        <div class="sitem"><strong>${m.quiz.length}</strong><span>Total</span></div>
-      </div>
-      <div>
-        <button class="btn-retry" onclick="retryQuiz()">↺ Ulangi Kuis</button>
-        <button class="btn-nxtm" onclick="nextMod()" ${!pass || curMod === currentMods.length - 1 ? 'disabled' : ''}>Modul Berikutnya →</button>
-      </div>
-    </div></div>`;
+function addModul(){
+ if(!MATERI_DATA[curKursus])MATERI_DATA[curKursus]=[];
+ const mods=MATERI_DATA[curKursus];
+ const newId=mods.length?mods[mods.length-1].id+1:1;
+ mods.push({id:newId,judul:'Modul Baru '+newId,section:'',durasi:'',videoUrl:'',pdfUrl:'',teks:'',terkunci:false,quiz:[]});
+ curModIdx=mods.length-1;
+ renderMateriSb();renderMateriForm(curModIdx);
+ showToast('Modul baru ditambahkan!');
 }
 
-function retryQuiz() {
-  QS[curMod] = { attempts: (QS[curMod] || {}).attempts || 0, correct: 0, current: 0, answers: [], showResult: false };
-  renderContent();
+function delMod(i){
+ const mods=MATERI_DATA[curKursus]||[];
+ if(!confirm('Hapus modul "'+mods[i].judul+'"?'))return;
+ mods.splice(i,1);
+ curModIdx=Math.max(0,i-1);
+ renderMateriSb();
+ if(mods.length>0)renderMateriForm(curModIdx);
+ else document.getElementById('materiForm').innerHTML=`<div style="padding:40px;text-align:center;color:var(--txl);font-size:13px">Semua modul dihapus. Klik "+ Modul" untuk menambah.</div>`;
+ showToast('Modul dihapus');
 }
 
-async function markDone() {
-  progress[curMod] = true;
-  if (curMod + 1 < currentMods.length) {
-    currentMods[curMod + 1].locked = false;
-  }
-  updateProg();
-  showToast('Materi selesai! Ambil kuis untuk lanjut ke modul berikutnya 🎯');
-  renderContent();
-  renderSb();
-  
-  if (currentUser && currentUser.email) {
-    try {
-      await apiPost({
-        action: 'updateProgress',
-        email: currentUser.email,
-        moduleId: curMod + 1,
-        actionType: 'complete'
-      });
-      localStorage.setItem('progress_' + currentUser.email, JSON.stringify(progress));
-    } catch(e) { console.error('Save error:', e); }
-  }
+function saveMateri(){
+ const mods=MATERI_DATA[curKursus]||[];
+ if(!mods[curModIdx])return;
+ const m=mods[curModIdx];
+ m.judul=document.getElementById('fJudul').value;
+ m.section=document.getElementById('fSection').value;
+ m.durasi=document.getElementById('fDurasi').value;
+ m.terkunci=document.getElementById('fLocked').value==='true';
+ m.videoUrl=document.getElementById('fVideo').value;
+ m.pdfUrl=document.getElementById('fPdf').value;
+ m.teks=document.getElementById('fTeks').value;
+ const quizCount=m.quiz.length;
+ m.quiz=m.quiz.map((q,qi)=>{
+  const opts=[0,1,2,3].map(oi=>{const el=document.getElementById('qo'+qi+'_'+oi);return el?el.value:'';});
+  const ansSel=document.getElementById('qa'+qi);const expEl=document.getElementById('qe'+qi);const qqEl=document.getElementById('qq'+qi);
+  return{q:qqEl?qqEl.value:q.q,opts,ans:ansSel?parseInt(ansSel.value):q.ans,exp:expEl?expEl.value:q.exp};
+ });
+ MATERI_DATA[curKursus]=mods;
+ renderMateriSb();
+ // Sync ke Sheets
+ if(CFG.scriptUrl&&!CFG.scriptUrl.includes('YOUR_SCRIPT_ID')){
+  fetch(CFG.scriptUrl,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'saveMateri',kursusId:curKursus,modul:m})});
+ }
+ const ok=document.getElementById('saveOk');
+ ok.style.display='block';setTimeout(()=>ok.style.display='none',2500);
+ showToast('✓ Modul "'+m.judul+'" berhasil disimpan');
 }
 
-function nextMod() { if (curMod < currentMods.length - 1) loadMod(curMod + 1); }
-function prevMod() { if (curMod > 0) loadMod(curMod - 1); }
-function toggleSb() { document.getElementById('sbEl').classList.toggle('open'); }
-function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 3200); }
+/* ======= PENDAFTAR TABLE ======= */
+function filterTbl(){
+ const q=document.getElementById('srch').value.toLowerCase();
+ const st=document.getElementById('fSt').value;
+ const kr=document.getElementById('fKr').value;
+ renderTblAll(allData.filter(d=>
+  (!q||d.nama.toLowerCase().includes(q)||d.email.toLowerCase().includes(q))&&
+  (!st||d.status===st)&&(!kr||d.kursus===kr)
+ ));
+}
+function setupFilters(){
+ const sel=document.getElementById('fKr');
+ const ku=[...new Set(allData.map(d=>d.kursus))];
+ sel.innerHTML='<option value="">Semua Kursus</option>'+ku.map(k=>`<option value="${k}">${k}</option>`).join('');
+}
+
+/* ======= MODAL ======= */
+function openModal(id){
+ curId=id;const d=allData.find(x=>x.id===id);if(!d)return;
+ document.getElementById('modalBody').innerHTML=`
+  <div class="drow"><span class="dlbl">No. Pendaftaran</span><span class="dval">#${d.id}</span></div>
+  <div class="drow"><span class="dlbl">Nama</span><span class="dval">${d.nama}</span></div>
+  <div class="drow"><span class="dlbl">Email</span><span class="dval">${d.email}</span></div>
+  <div class="drow"><span class="dlbl">WhatsApp</span><span class="dval">${d.wa}</span></div>
+  <div class="drow"><span class="dlbl">Kursus</span><span class="dval">${d.kursus}</span></div>
+  <div class="drow"><span class="dlbl">Nominal Transfer</span><span class="dval" style="color:var(--brand);font-weight:700">${d.nominal}</span></div>
+  <div class="drow"><span class="dlbl">Tanggal</span><span class="dval">${d.tanggal}</span></div>
+  <div class="bukti-box"><div style="font-size:24px;margin-bottom:6px">🖼</div><div style="font-size:12px;color:var(--txl)">Bukti transfer tersimpan di Google Drive<br>Tinjau sebelum klik Verifikasi</div></div>`;
+ document.getElementById('modalBg').classList.add('on');
+}
+function closeModal(){document.getElementById('modalBg').classList.remove('on');curId=null;}
+function updateStatus(status){
+ if(!curId)return;
+ const idx=allData.findIndex(d=>d.id===curId);if(idx<0)return;
+ allData[idx].status=status;
+ closeModal();renderAll();
+ showToast(status==='verified'?'✓ Diverifikasi — email akses dikirim otomatis':'✗ Ditolak — notifikasi dikirim ke pendaftar');
+}
+
+/* ======= EXPORT ======= */
+function exportCSV(){
+ const h=['ID','Nama','Email','WhatsApp','Kota','Kursus','Tanggal','Nominal','Status','Sumber'];
+ const rows=allData.map(d=>[d.id,d.nama,d.email,d.wa,d.kota,d.kursus,d.tanggal,d.nominal,d.status,d.sumber]);
+ const csv=[h,...rows].map(r=>r.join(',')).join('\n');
+ const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='pendaftar_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+ showToast('✓ File CSV berhasil diunduh');
+}
+
+/* ======= NAV ======= */
+function showPage(page,navEl){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+ document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+ document.getElementById('pg'+page.charAt(0).toUpperCase()+page.slice(1)).classList.add('on');
+ if(navEl)navEl.classList.add('active');
+ const titles={dashboard:'Dashboard',pendaftar:'Kelola Pendaftar',kursus:'Kelola Kursus',materi:'Edit Materi'};
+ document.getElementById('pageTitle').textContent=titles[page]||page;
+ if(page==='pendaftar')setupFilters();
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),3000);}
+
+document.getElementById('modalBg').addEventListener('click',e=>{if(e.target===document.getElementById('modalBg'))closeModal();});
+document.getElementById('lp').addEventListener('keyup',e=>{if(e.key==='Enter')doLogin();});
 </script>
 </body>
 </html>
