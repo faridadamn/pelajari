@@ -198,7 +198,11 @@ body{font-family:var(--fb);background:var(--bg);color:var(--tx);line-height:1.6}
 <div class="toast" id="toast"></div>
 
 <script>
-const CFG={demoEmail:'demo@akademi.id',demoToken:'DEMO2025', scriptUrl : 'https://script.google.com/macros/s/AKfycbyd06IWe5CREEZ5l1MnG5X41DUlTQV-ZwSXp5dbUrbiJZVlbhnxFSfKdfgsT59Y1NebcQ/exec'};
+const CFG = {
+  demoEmail: 'demo@akademi.id',
+  demoToken: 'DEMO2025',
+  scriptUrl: 'https://script.google.com/macros/s/AKfycbyd06IWe5CREEZ5l1MnG5X41DUlTQV-ZwSXp5dbUrbiJZVlbhnxFSfKdfgsT59Y1NebcQ/exec'
+};
 const DEMO={nama:'Rina Kusuma',email:'demo@akademi.id',kursus:'UI/UX Design Bootcamp',expDate:'31 Des 2025',progress:[true,true,true,true,false,false,false,false,false,false]};
 
 const MODS=[
@@ -252,173 +256,476 @@ const MODS=[
 ];
 
 let curMod=0,curTab='video',progress=[],QS={};
+function jsonpRequest(url, callbackName) {
+  return new Promise((resolve, reject) => {
+    const callback = callbackName || 'jsonp_callback_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+    const script = document.createElement('script');
+    
+    const separator = url.includes('?') ? '&' : '?';
+    script.src = url + separator + 'callback=' + callback;
+    
+    window[callback] = function(data) {
+      delete window[callback];
+      document.body.removeChild(script);
+      resolve(data);
+    };
+    
+    script.onerror = function() {
+      delete window[callback];
+      document.body.removeChild(script);
+      reject(new Error('JSONP request failed'));
+    };
+    
+    document.body.appendChild(script);
+  });
+}
 
-function doLogin(){
- const em=document.getElementById('lemail').value.trim().toLowerCase();
- const tk=document.getElementById('ltoken').value.trim().toUpperCase();
- if(em===CFG.demoEmail&&tk===CFG.demoToken){initApp({...DEMO});return;}
- document.getElementById('lerr').style.display='block';
+// Fungsi untuk GET data dari server
+async function fetchData(action, params = {}) {
+  if (!CFG.scriptUrl || CFG.scriptUrl.includes('YOUR_SCRIPT_ID')) {
+    console.warn('Script URL not configured');
+    return null;
+  }
+  
+  let url = CFG.scriptUrl + '?action=' + action;
+  Object.keys(params).forEach(key => {
+    url += '&' + encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
+  });
+  
+  try {
+    const data = await jsonpRequest(url);
+    return data;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    showToast('Gagal mengambil data: ' + error.message);
+    return null;
+  }
+}
+
+// Fungsi untuk POST dengan no-cors
+async function postData(action, data) {
+  if (!CFG.scriptUrl || CFG.scriptUrl.includes('YOUR_SCRIPT_ID')) {
+    console.warn('Script URL not configured');
+    return { success: false, error: 'URL not configured' };
+  }
+  
+  try {
+    const response = await fetch(CFG.scriptUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        action: action,
+        ...data
+      })
+    });
+    
+    // Karena no-cors, response tidak bisa dibaca
+    // Tapi request tetap terkirim
+    return { success: true, message: 'Request sent' };
+  } catch (error) {
+    console.error('POST error:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+  
+// Ganti fungsi doLogin
+async function doLogin() {
+  const email = document.getElementById('lemail').value.trim().toLowerCase();
+  const token = document.getElementById('ltoken').value.trim().toUpperCase();
+  
+  // Cek demo dulu
+  if (email === CFG.demoEmail && token === CFG.demoToken) {
+    initApp({...DEMO});
+    return;
+  }
+  
+  // Cek ke server
+  showToast('Memeriksa akses...');
+  const result = await fetchData('checkAccess', { email: email, token: token });
+  
+  if (result && result.valid && result.user) {
+    // Login sukses - ambil data dari server
+    const user = result.user;
+    
+    // Load materi untuk kursus ini
+    const materiData = await fetchData('getMateri', { kursusId: user.kursusId });
+    
+    if (materiData && materiData.materi) {
+      // Konversi data dari server ke format MODS
+      const serverMods = materiData.materi.map(mod => ({
+        id: mod.id,
+        title: mod.judul,
+        dur: mod.durasi + ' min',
+        sec: mod.section || 'Modul',
+        locked: mod.terkunci || false,
+        video: { url: mod.videoUrl || '', cap: mod.judul },
+        pdf: { 
+          nama: mod.pdfUrl ? 'Materi ' + mod.judul + '.pdf' : '', 
+          url: mod.pdfUrl || '#', 
+          size: '1 MB', 
+          hal: 10 
+        },
+        teks: mod.teks || '<p>Konten sedang disiapkan.</p>',
+        quiz: mod.quiz || []
+      }));
+      
+      // Gunakan data dari server
+      window.MODS_SERVER = serverMods;
+      initApp({
+        nama: user.nama,
+        email: user.email,
+        kursus: user.kursus,
+        expDate: user.expDate,
+        progress: user.progress || []
+      });
+    } else {
+      // Fallback ke demo
+      initApp({
+        nama: user.nama,
+        email: user.email,
+        kursus: user.kursus,
+        expDate: user.expDate,
+        progress: []
+      });
+    }
+  } else {
+    document.getElementById('lerr').style.display = 'block';
+    if (result && result.reason === 'expired') {
+      document.getElementById('lerr').textContent = 'Akses sudah kadaluarsa. Hubungi admin.';
+    } else {
+      document.getElementById('lerr').textContent = 'Email atau token tidak valid.';
+    }
+  }
 }
 function doLogout(){document.getElementById('appEl').classList.remove('on');document.getElementById('lw').style.display='flex';document.getElementById('ltoken').value='';}
-function initApp(u){
- progress=[...u.progress];QS={};
- document.getElementById('lw').style.display='none';
- document.getElementById('appEl').classList.add('on');
- const ini=u.nama.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
- document.getElementById('uAv').textContent=ini;
- document.getElementById('uName').textContent=u.nama;
- document.getElementById('uCourse').textContent=u.kursus;
- document.getElementById('expDate').textContent='s.d. '+u.expDate;
- updateProg();renderSb();loadMod(0);
+// Ganti fungsi initApp
+function initApp(u) {
+  // Gunakan MODS dari server jika ada, else pakai demo MODS
+  const useMods = window.MODS_SERVER || MODS;
+  
+  // Override MODS global
+  window.currentMods = useMods;
+  
+  // Inisialisasi progress
+  if (u.progress && u.progress.length > 0) {
+    progress = u.progress;
+  } else {
+    // Progress default: semua false kecuali modul pertama
+    progress = new Array(useMods.length).fill(false);
+    progress[0] = true; // Modul pertama terbuka
+  }
+  
+  // Set locked status berdasarkan progress
+  useMods.forEach((mod, idx) => {
+    if (idx > 0 && !progress[idx-1]) {
+      mod.locked = true;
+    } else {
+      mod.locked = false;
+    }
+  });
+  
+  QS = {};
+  
+  // Load QS dari localStorage jika ada
+  const savedQS = localStorage.getItem('quiz_state_' + u.email);
+  if (savedQS) {
+    try {
+      Object.assign(QS, JSON.parse(savedQS));
+    } catch(e) {}
+  }
+  
+  document.getElementById('lw').style.display = 'none';
+  document.getElementById('appEl').classList.add('on');
+  
+  const ini = u.nama.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+  document.getElementById('uAv').textContent = ini;
+  document.getElementById('uName').textContent = u.nama;
+  document.getElementById('uCourse').textContent = u.kursus;
+  document.getElementById('expDate').textContent = 's.d. ' + u.expDate;
+  
+  updateProg();
+  renderSb();
+  loadMod(0);
+  
+  // Simpan data user untuk referensi
+  window.currentUser = u;
 }
 function updateProg(){
  const d=progress.filter(Boolean).length,t=progress.length;
  document.getElementById('progTxt').textContent=d+'/'+t+' modul';
  document.getElementById('progBar').style.width=Math.round(d/t*100)+'%';
 }
-function renderSb(){
- let sec='',html='';
- MODS.forEach((m,i)=>{
-  if(m.sec!==sec){sec=m.sec;html+=`<div class="m-sec-lbl">${m.sec}</div>`;}
-  const done=progress[i]&&!m.locked,qp=QS[i]&&QS[i].passed,active=i===curMod;
-  const ic=m.locked?'🔒':done?(qp?'★':'✓'):(i+1);
-  html+=`<div class="m-item${active?' active':''}${done?' done':''}${m.locked?' locked':''}" onclick="loadMod(${i})">
-   <div class="m-ic">${ic}</div>
-   <div class="m-txt"><div class="m-title">${m.title}</div><div class="m-dur">${m.dur}${m.quiz&&m.quiz.length?' · '+m.quiz.length+' soal':''}</div></div>
-  </div>`;
- });
- document.getElementById('mList').innerHTML=html;
+// Update renderSb
+function renderSb() {
+  let sec = '';
+  let html = '';
+  const mods = window.currentMods || MODS;
+  
+  mods.forEach((m, i) => {
+    if (m.sec !== sec) {
+      sec = m.sec;
+      html += `<div class="m-sec-lbl">${m.sec}</div>`;
+    }
+    const done = progress[i] && !m.locked;
+    const qp = QS[i] && QS[i].passed;
+    const active = i === curMod;
+    const ic = m.locked ? '🔒' : done ? (qp ? '★' : '✓') : (i + 1);
+    
+    html += `<div class="m-item${active ? ' active' : ''}${done ? ' done' : ''}${m.locked ? ' locked' : ''}" onclick="loadMod(${i})">
+      <div class="m-ic">${ic}</div>
+      <div class="m-txt">
+        <div class="m-title">${m.title}</div>
+        <div class="m-dur">${m.dur}${m.quiz && m.quiz.length ? ' · ' + m.quiz.length + ' soal' : ''}</div>
+      </div>
+    </div>`;
+  });
+  
+  document.getElementById('mList').innerHTML = html;
 }
-function loadMod(i){
- if(MODS[i].locked){showToast('🔒 Selesaikan modul sebelumnya dulu');return;}
- curMod=i;curTab='video';
- document.getElementById('tbTitle').textContent='Modul '+MODS[i].id+': '+MODS[i].title;
- renderSb();renderContent();document.getElementById('ca').scrollTop=0;
- if(window.innerWidth<769)document.getElementById('sbEl').classList.remove('open');
+// Ganti fungsi loadMod dengan ini:
+function loadMod(i) {
+  const mods = window.currentMods || MODS;  // ← tambahkan ini
+  if (mods[i].locked) {
+    showToast('🔒 Selesaikan modul sebelumnya dulu');
+    return;
+  }
+  curMod = i;
+  curTab = 'video';
+  document.getElementById('tbTitle').textContent = 'Modul ' + mods[i].id + ': ' + mods[i].title;
+  renderSb();
+  renderContent();
+  document.getElementById('ca').scrollTop = 0;
+  if (window.innerWidth < 769) document.getElementById('sbEl').classList.remove('open');
 }
-function renderContent(){
- const m=MODS[curMod],done=progress[curMod],qs=QS[curMod]||{};
- const qUnlock=done,qPassed=qs.passed;
- const qBadge=qPassed?'<span class="badge ok">✓ Lulus</span>':qs.attempts?'<span class="badge">Belum lulus</span>':'';
- const doneBadge=done?`<div class="done-badge">✓ <span>Materi selesai${qPassed?' · Kuis lulus':' — ambil kuis untuk lanjut'}</span></div>`:'';
- const qStyle=!qUnlock?'opacity:.45;cursor:not-allowed':'';
- document.getElementById('ca').innerHTML=`
-  <div style="margin-bottom:20px">
-   <div class="mod-num">Modul ${m.id} dari ${MODS.length}</div>
-   <div class="mod-title">${m.title}</div>
-   <div class="mod-meta"><span>⏱ ${m.dur}</span><span>📁 ${m.sec}</span>${m.quiz&&m.quiz.length?`<span>🎯 ${m.quiz.length} soal kuis</span>`:''}</div>
-  </div>
-  ${doneBadge}
-  <div class="ctabs">
-   <button class="ctab${curTab==='video'?' active':''}" onclick="switchTab('video')">▶ Video</button>
-   <button class="ctab${curTab==='pdf'?' active':''}" onclick="switchTab('pdf')">📄 PDF</button>
-   <button class="ctab${curTab==='teks'?' active':''}" onclick="switchTab('teks')">📝 Teks</button>
-   ${m.quiz&&m.quiz.length?`<button class="ctab qa${curTab==='quiz'?' active':''}" style="${qStyle}" onclick="${qUnlock?'switchTab(\'quiz\')':'showToast(\'Tandai materi selesai dulu\')'}"">🎯 Kuis ${qBadge}</button>`:''}
-  </div>
-  <div id="tabBody"></div>
-  <div class="cnav">
-   <button class="btn-prev" onclick="prevMod()" ${curMod===0?'disabled':''}>← Sebelumnya</button>
-   ${!done?`<button class="btn-mark" onclick="markDone()">Tandai Selesai →</button>`:`<button class="btn-mark" onclick="nextMod()" ${curMod===MODS.length-1?'disabled':''}>Modul Berikutnya →</button>`}
-  </div>`;
- renderTab();
+// Ganti fungsi renderContent dengan ini:
+function renderContent() {
+  const mods = window.currentMods || MODS;  // ← tambahkan ini
+  const m = mods[curMod];
+  const done = progress[curMod];
+  const qs = QS[curMod] || {};
+  const qUnlock = done;
+  const qPassed = qs.passed;
+  const qBadge = qPassed ? '<span class="badge ok">✓ Lulus</span>' : (qs.attempts ? '<span class="badge">Belum lulus</span>' : '');
+  const doneBadge = done ? `<div class="done-badge">✓ <span>Materi selesai${qPassed ? ' · Kuis lulus' : ' — ambil kuis untuk lanjut'}</span></div>` : '';
+  const qStyle = !qUnlock ? 'opacity:.45;cursor:not-allowed' : '';
+  
+  document.getElementById('ca').innerHTML = `
+    <div style="margin-bottom:20px">
+      <div class="mod-num">Modul ${m.id} dari ${mods.length}</div>
+      <div class="mod-title">${m.title}</div>
+      <div class="mod-meta"><span>⏱ ${m.dur}</span><span>📁 ${m.sec}</span>${m.quiz && m.quiz.length ? `<span>🎯 ${m.quiz.length} soal kuis</span>` : ''}</div>
+    </div>
+    ${doneBadge}
+    <div class="ctabs">
+      <button class="ctab${curTab === 'video' ? ' active' : ''}" onclick="switchTab('video')">▶ Video</button>
+      <button class="ctab${curTab === 'pdf' ? ' active' : ''}" onclick="switchTab('pdf')">📄 PDF</button>
+      <button class="ctab${curTab === 'teks' ? ' active' : ''}" onclick="switchTab('teks')">📝 Teks</button>
+      ${m.quiz && m.quiz.length ? `<button class="ctab qa${curTab === 'quiz' ? ' active' : ''}" style="${qStyle}" onclick="${qUnlock ? "switchTab('quiz')" : "showToast('Tandai materi selesai dulu')"}">🎯 Kuis ${qBadge}</button>` : ''}
+    </div>
+    <div id="tabBody"></div>
+    <div class="cnav">
+      <button class="btn-prev" onclick="prevMod()" ${curMod === 0 ? 'disabled' : ''}>← Sebelumnya</button>
+      ${!done ? `<button class="btn-mark" onclick="markDone()">Tandai Selesai →</button>` : `<button class="btn-mark" onclick="nextMod()" ${curMod === mods.length - 1 ? 'disabled' : ''}>Modul Berikutnya →</button>`}
+    </div>
+  `;
+  renderTab();
 }
-function renderTab(){
- const m=MODS[curMod],body=document.getElementById('tabBody');
- if(curTab==='video'){
-  const vEl=m.video.url?`<iframe src="${m.video.url}" allowfullscreen></iframe>`:`<div class="vid-ph"><div class="play-c">▶</div><div style="font-size:14px;opacity:.85">${m.video.cap||'Video tersedia di sistem penuh'}</div></div>`;
-  body.innerHTML=`<div class="vid-wrap">${vEl}</div><div class="vid-note">📌 Link video dikelola admin via Google Sheets.</div>`;
- } else if(curTab==='pdf'){
-  body.innerHTML=m.pdf.nama?`<div class="pdf-card"><div class="pdf-ic">PDF</div><div class="pdf-info"><div class="pdf-name">${m.pdf.nama}</div><div class="pdf-meta">${m.pdf.size} · ${m.pdf.hal} hal.</div></div><a href="${m.pdf.url||'#'}" class="btn-dl" target="_blank">Download</a></div>`:`<div style="padding:32px;text-align:center;color:var(--txl);font-size:13px">Belum ada PDF.</div>`;
- } else if(curTab==='teks'){
-  body.innerHTML=m.teks?`<div class="teks">${m.teks}</div>`:`<div style="padding:32px;text-align:center;color:var(--txl);font-size:13px">Konten teks belum tersedia.</div>`;
- } else if(curTab==='quiz'){
-  renderQuiz();
- }
+// Ganti fungsi renderTab dengan ini:
+function renderTab() {
+  const mods = window.currentMods || MODS;  // ← tambahkan ini
+  const m = mods[curMod];
+  const body = document.getElementById('tabBody');
+  
+  if (curTab === 'video') {
+    const vEl = m.video.url ? `<iframe src="${m.video.url}" allowfullscreen></iframe>` : `<div class="vid-ph"><div class="play-c">▶</div><div style="font-size:14px;opacity:.85">${m.video.cap || 'Video tersedia di sistem penuh'}</div></div>`;
+    body.innerHTML = `<div class="vid-wrap">${vEl}</div><div class="vid-note">📌 Link video dikelola admin via Google Sheets.</div>`;
+  } else if (curTab === 'pdf') {
+    body.innerHTML = m.pdf.nama ? `<div class="pdf-card"><div class="pdf-ic">PDF</div><div class="pdf-info"><div class="pdf-name">${m.pdf.nama}</div><div class="pdf-meta">${m.pdf.size} · ${m.pdf.hal} hal.</div></div><a href="${m.pdf.url || '#'}" class="btn-dl" target="_blank">Download</a></div>` : `<div style="padding:32px;text-align:center;color:var(--txl);font-size:13px">Belum ada PDF.</div>`;
+  } else if (curTab === 'teks') {
+    body.innerHTML = m.teks ? `<div class="teks">${m.teks}</div>` : `<div style="padding:32px;text-align:center;color:var(--txl);font-size:13px">Konten teks belum tersedia.</div>`;
+  } else if (curTab === 'quiz') {
+    renderQuiz();
+  }
 }
 function switchTab(t){curTab=t;renderContent();}
 
 /* ======= QUIZ ENGINE ======= */
-function renderQuiz(){
- const m=MODS[curMod],qs=QS[curMod]||{},body=document.getElementById('tabBody');
- if(!m.quiz||!m.quiz.length){body.innerHTML=`<div style="padding:32px;text-align:center;color:var(--txl);font-size:13px">Belum ada kuis.</div>`;return;}
- if(qs.showResult){renderResult(body,m,qs);return;}
- const qi=qs.current||0,q=m.quiz[qi],pct=Math.round(qi/m.quiz.length*100),L=['A','B','C','D'];
- body.innerHTML=`
-  <div class="qwrap">
-   <div class="qhdr"><div class="qtitle">Kuis: ${m.title}</div><div class="qsub">${m.quiz.length} soal · Minimal 70% untuk lulus</div></div>
-   <div class="qctr"><span>Soal ${qi+1} / ${m.quiz.length}</span><span>Benar: <strong id="qsc">${qs.correct||0}</strong></span></div>
-   <div class="qprog-bg"><div class="qprog-fill" style="width:${pct}%"></div></div>
-   <div style="margin-bottom:14px"></div>
-   <div class="qcard">
-    <div class="qnum">Soal ${qi+1}</div>
-    <div class="qtext">${q.q}</div>
-    <div class="qopts" id="qOpts">${q.opts.map((o,i)=>`<button class="qopt" id="qo${i}" onclick="ansQ(${i})"><span class="qltr">${L[i]}</span>${o}</button>`).join('')}</div>
-    <div class="qfb" id="qfb"></div>
-   </div>
-   <div class="qnav">
-    <span style="font-size:12px;color:var(--txl)">Percobaan ke-${(qs.attempts||0)+1}</span>
-    <button class="btn-qnext" id="btnNext" onclick="nextQ()" disabled>Lanjut →</button>
-   </div>
-  </div>`;
-}
-function ansQ(idx){
- const m=MODS[curMod],qs=QS[curMod]||{current:0,correct:0,answers:[]},qi=qs.current||0,q=m.quiz[qi],L=['A','B','C','D'],ok=idx===q.ans;
- document.querySelectorAll('.qopt').forEach(b=>b.disabled=true);
- document.getElementById('qo'+idx).classList.add(ok?'correct':'wrong');
- document.getElementById('qo'+idx).querySelector('.qltr').textContent=ok?'✓':'✗';
- if(!ok){document.getElementById('qo'+q.ans).classList.add('missed');document.getElementById('qo'+q.ans).querySelector('.qltr').textContent='✓';}
- const fb=document.getElementById('qfb');
- fb.className='qfb show '+(ok?'ok':'err');
- fb.innerHTML=(ok?'✓ Benar! ':'✗ Kurang tepat. ')+q.exp;
- const nc=(qs.correct||0)+(ok?1:0);
- QS[curMod]={...qs,correct:nc,answers:[...(qs.answers||[]),{qi,idx,ok}]};
- document.getElementById('qsc').textContent=nc;
- const btnNext=document.getElementById('btnNext');
- btnNext.disabled=false;
- btnNext.textContent=qi===m.quiz.length-1?'Lihat Hasil →':'Lanjut →';
-}
-function nextQ(){
- const m=MODS[curMod],qs=QS[curMod]||{},qi=(qs.current||0)+1;
- if(qi>=m.quiz.length){
-  const pct=Math.round((qs.correct||0)/m.quiz.length*100),passed=pct>=70;
-  QS[curMod]={...qs,showResult:true,pct,passed,attempts:(qs.attempts||0)+1};
-  if(passed){
-   progress[curMod]=true;
-   if(curMod+1<MODS.length)MODS[curMod+1].locked=false;
-   updateProg();
+// Ganti fungsi renderQuiz dengan ini:
+function renderQuiz() {
+  const mods = window.currentMods || MODS;  // ← tambahkan ini
+  const m = mods[curMod];
+  const qs = QS[curMod] || {};
+  const body = document.getElementById('tabBody');
+  
+  if (!m.quiz || !m.quiz.length) {
+    body.innerHTML = `<div style="padding:32px;text-align:center;color:var(--txl);font-size:13px">Belum ada kuis.</div>`;
+    return;
   }
-  renderContent();
- } else {
-  QS[curMod]={...qs,current:qi};renderContent();
- }
+  if (qs.showResult) {
+    renderResult(body, m, qs);
+    return;
+  }
+  
+  const qi = qs.current || 0;
+  const q = m.quiz[qi];
+  const pct = Math.round(qi / m.quiz.length * 100);
+  const L = ['A', 'B', 'C', 'D'];
+  
+  body.innerHTML = `
+    <div class="qwrap">
+      <div class="qhdr"><div class="qtitle">Kuis: ${m.title}</div><div class="qsub">${m.quiz.length} soal · Minimal 70% untuk lulus</div></div>
+      <div class="qctr"><span>Soal ${qi + 1} / ${m.quiz.length}</span><span>Benar: <strong id="qsc">${qs.correct || 0}</strong></span></div>
+      <div class="qprog-bg"><div class="qprog-fill" style="width:${pct}%"></div></div>
+      <div style="margin-bottom:14px"></div>
+      <div class="qcard">
+        <div class="qnum">Soal ${qi + 1}</div>
+        <div class="qtext">${q.q}</div>
+        <div class="qopts" id="qOpts">${q.opts.map((o, i) => `<button class="qopt" id="qo${i}" onclick="ansQ(${i})"><span class="qltr">${L[i]}</span>${o}</button>`).join('')}</div>
+        <div class="qfb" id="qfb"></div>
+      </div>
+      <div class="qnav">
+        <span style="font-size:12px;color:var(--txl)">Percobaan ke-${(qs.attempts || 0) + 1}</span>
+        <button class="btn-qnext" id="btnNext" onclick="nextQ()" disabled>Lanjut →</button>
+      </div>
+    </div>`;
+}
+// Ganti fungsi ansQ dengan ini:
+function ansQ(idx) {
+  const mods = window.currentMods || MODS;  // ← tambahkan ini
+  const m = mods[curMod];
+  const qs = QS[curMod] || { current: 0, correct: 0, answers: [] };
+  const qi = qs.current || 0;
+  const q = m.quiz[qi];
+  const ok = idx === q.ans;
+  
+  document.querySelectorAll('.qopt').forEach(b => b.disabled = true);
+  document.getElementById('qo' + idx).classList.add(ok ? 'correct' : 'wrong');
+  document.getElementById('qo' + idx).querySelector('.qltr').textContent = ok ? '✓' : '✗';
+  
+  if (!ok) {
+    document.getElementById('qo' + q.ans).classList.add('missed');
+    document.getElementById('qo' + q.ans).querySelector('.qltr').textContent = '✓';
+  }
+  
+  const fb = document.getElementById('qfb');
+  fb.className = 'qfb show ' + (ok ? 'ok' : 'err');
+  fb.innerHTML = (ok ? '✓ Benar! ' : '✗ Kurang tepat. ') + q.exp;
+  
+  const nc = (qs.correct || 0) + (ok ? 1 : 0);
+  QS[curMod] = { ...qs, correct: nc, answers: [...(qs.answers || []), { qi, idx, ok }] };
+  document.getElementById('qsc').textContent = nc;
+  
+  const btnNext = document.getElementById('btnNext');
+  btnNext.disabled = false;
+  btnNext.textContent = qi === m.quiz.length - 1 ? 'Lihat Hasil →' : 'Lanjut →';
+}
+function nextQ() {
+  const m = window.currentMods[curMod];
+  const qs = QS[curMod] || {};
+  const qi = (qs.current || 0) + 1;
+  
+  if (qi >= m.quiz.length) {
+    const pct = Math.round((qs.correct || 0) / m.quiz.length * 100);
+    const passed = pct >= 70;
+    
+    QS[curMod] = {
+      ...qs,
+      showResult: true,
+      pct: pct,
+      passed: passed,
+      attempts: (qs.attempts || 0) + 1
+    };
+    
+    if (passed) {
+      progress[curMod] = true;
+      if (curMod + 1 < window.currentMods.length) {
+        window.currentMods[curMod + 1].locked = false;
+      }
+      updateProg();
+      
+      // Simpan progress ke server
+      if (window.currentUser && window.currentUser.email) {
+        postData('updateProgress', {
+          email: window.currentUser.email,
+          moduleId: curMod + 1,
+          action: 'complete',
+          quizScore: pct
+        });
+      }
+    }
+    
+    // Simpan state ke localStorage
+    if (window.currentUser) {
+      localStorage.setItem('quiz_state_' + window.currentUser.email, JSON.stringify(QS));
+      localStorage.setItem('progress_' + window.currentUser.email, JSON.stringify(progress));
+    }
+    
+    renderContent();
+  } else {
+    QS[curMod] = { ...qs, current: qi };
+    renderContent();
+  }
 }
 function renderResult(body,m,qs){
- const pass=qs.passed;
- body.innerHTML=`
-  <div class="qwrap"><div class="qresult">
-   <div class="sring ${pass?'pass':'fail'}"><div class="spct">${qs.pct}%</div><div class="slbl">skor</div></div>
-   <div class="rtitle">${pass?'Selamat, Kamu Lulus! 🎉':'Belum Lulus — Coba Lagi'}</div>
-   <div class="rsub">${pass?'Kamu lulus kuis modul ini. Lanjutkan ke modul berikutnya!':'Perlu minimal 70%. Pelajari ulang materinya dan coba lagi.'}</div>
-   <div class="sdetail">
-    <div class="sitem c"><strong>${qs.correct}</strong><span>Benar</span></div>
-    <div class="sitem w"><strong>${m.quiz.length-qs.correct}</strong><span>Salah</span></div>
-    <div class="sitem"><strong>${m.quiz.length}</strong><span>Total</span></div>
-   </div>
-   <div>
-    <button class="btn-retry" onclick="retryQuiz()">↺ Ulangi Kuis</button>
-    <button class="btn-nxtm" onclick="nextMod()" ${!pass||curMod===MODS.length-1?'disabled':''}>Modul Berikutnya →</button>
-   </div>
-  </div></div>`;
+  const mods = window.currentMods || MODS;  // ← tambahkan ini
+  const pass = qs.passed;
+  
+  body.innerHTML = `
+    <div class="qwrap"><div class="qresult">
+      <div class="sring ${pass ? 'pass' : 'fail'}"><div class="spct">${qs.pct}%</div><div class="slbl">skor</div></div>
+      <div class="rtitle">${pass ? 'Selamat, Kamu Lulus! 🎉' : 'Belum Lulus — Coba Lagi'}</div>
+      <div class="rsub">${pass ? 'Kamu lulus kuis modul ini. Lanjutkan ke modul berikutnya!' : 'Perlu minimal 70%. Pelajari ulang materinya dan coba lagi.'}</div>
+      <div class="sdetail">
+        <div class="sitem c"><strong>${qs.correct}</strong><span>Benar</span></div>
+        <div class="sitem w"><strong>${m.quiz.length - qs.correct}</strong><span>Salah</span></div>
+        <div class="sitem"><strong>${m.quiz.length}</strong><span>Total</span></div>
+      </div>
+      <div>
+        <button class="btn-retry" onclick="retryQuiz()">↺ Ulangi Kuis</button>
+        <button class="btn-nxtm" onclick="nextMod()" ${!pass || curMod === mods.length - 1 ? 'disabled' : ''}>Modul Berikutnya →</button>
+      </div>
+    </div></div>`;
 }
 function retryQuiz(){QS[curMod]={attempts:(QS[curMod]||{}).attempts||0,correct:0,current:0,answers:[],showResult:false};renderContent();}
-function markDone(){
- progress[curMod]=true;
- if(curMod+1<MODS.length)MODS[curMod+1].locked=false;
- updateProg();showToast('Materi selesai! Ambil kuis untuk lanjut ke modul berikutnya 🎯');
- renderContent();renderSb();
+// Update fungsi markDone
+async function markDone() {
+  progress[curMod] = true;
+  
+  // Buka modul berikutnya
+  if (curMod + 1 < window.currentMods.length) {
+    window.currentMods[curMod + 1].locked = false;
+  }
+  
+  updateProg();
+  showToast('Materi selesai! Ambil kuis untuk lanjut ke modul berikutnya 🎯');
+  renderContent();
+  renderSb();
+  
+  // Simpan progress ke server
+  if (window.currentUser && window.currentUser.email) {
+    await postData('updateProgress', {
+      email: window.currentUser.email,
+      moduleId: curMod + 1,
+      action: 'complete'
+    });
+    
+    // Simpan juga ke localStorage
+    localStorage.setItem('progress_' + window.currentUser.email, JSON.stringify(progress));
+    localStorage.setItem('quiz_state_' + window.currentUser.email, JSON.stringify(QS));
+  }
 }
-function nextMod(){if(curMod<MODS.length-1)loadMod(curMod+1);}
-function prevMod(){if(curMod>0)loadMod(curMod-1);}
+function nextMod() {
+  const mods = window.currentMods || MODS;
+  if (curMod < mods.length - 1) loadMod(curMod + 1);
+}
+
+function prevMod() {
+  if (curMod > 0) loadMod(curMod - 1);
+}
 function toggleSb(){document.getElementById('sbEl').classList.toggle('open');}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),3200);}
 </script>
