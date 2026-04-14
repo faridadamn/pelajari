@@ -256,9 +256,32 @@ const MODS=[
 ];
 
 let curMod=0,curTab='video',progress=[],QS={};
-// Ganti seluruh fungsi jsonpRequest dan fetchData dengan ini:
+// Fungsi JSONP untuk GET (tidak kena CORS)
+function jsonpRequest(url) {
+  return new Promise((resolve, reject) => {
+    const callback = 'jsonp_callback_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+    const script = document.createElement('script');
+    
+    const separator = url.includes('?') ? '&' : '?';
+    script.src = url + separator + 'callback=' + callback;
+    
+    window[callback] = function(data) {
+      delete window[callback];
+      document.body.removeChild(script);
+      resolve(data);
+    };
+    
+    script.onerror = function() {
+      delete window[callback];
+      document.body.removeChild(script);
+      reject(new Error('JSONP request failed'));
+    };
+    
+    document.body.appendChild(script);
+  });
+}
 
-// Fungsi untuk GET data - pakai fetch biasa dengan mode cors
+// Fungsi untuk GET data dari server - PAKAI JSONP
 async function fetchData(action, params = {}) {
   if (!CFG.scriptUrl || CFG.scriptUrl.includes('YOUR_SCRIPT_ID')) {
     console.warn('Script URL not configured');
@@ -271,20 +294,7 @@ async function fetchData(action, params = {}) {
   });
   
   try {
-    // Pakai fetch biasa, karena AppScript sudah support CORS
-    const response = await fetch(url, {
-      method: 'GET',
-      mode: 'cors',  // ← ganti dari no-cors ke cors
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    const data = await response.json();
+    const data = await jsonpRequest(url);
     return data;
   } catch (error) {
     console.error('Fetch error:', error);
@@ -293,9 +303,7 @@ async function fetchData(action, params = {}) {
   }
 }
 
-// Hapus fungsi jsonpRequest (tidak dipakai lagi)
-
-// Fungsi untuk POST dengan no-cors
+// POST tetap pakai no-cors
 async function postData(action, data) {
   if (!CFG.scriptUrl || CFG.scriptUrl.includes('YOUR_SCRIPT_ID')) {
     console.warn('Script URL not configured');
@@ -303,7 +311,7 @@ async function postData(action, data) {
   }
   
   try {
-    const response = await fetch(CFG.scriptUrl, {
+    await fetch(CFG.scriptUrl, {
       method: 'POST',
       mode: 'no-cors',
       headers: {
@@ -315,8 +323,6 @@ async function postData(action, data) {
       })
     });
     
-    // Karena no-cors, response tidak bisa dibaca
-    // Tapi request tetap terkirim
     return { success: true, message: 'Request sent' };
   } catch (error) {
     console.error('POST error:', error);
