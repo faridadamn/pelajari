@@ -6,6 +6,7 @@
 <title>Portal Belajar — AkademiPro</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
+/* (salin semua style dari kode belajar.html Anda, sama persis) */
 :root{--brand:#1a6b4a;--brand2:#2d9668;--bl:#e8f5ee;--bm:#9fe1cb;--acc:#f0a500;--tx:#121c17;--txm:#4a6055;--txl:#8fa89d;--bg:#f5f9f7;--wh:#fff;--br:#d8e8e1;--r:14px;--rs:8px;--fh:'Sora',sans-serif;--fb:'DM Sans',sans-serif}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--fb);background:var(--bg);color:var(--tx);line-height:1.6}
@@ -88,7 +89,6 @@ body{font-family:var(--fb);background:var(--bg);color:var(--tx);line-height:1.6}
 .teks ul{margin:0 0 14px 20px}
 .teks li{margin-bottom:6px}
 .teks .hl{background:var(--bl);border-left:3px solid var(--brand);padding:12px 16px;margin:16px 0}
-/* QUIZ */
 .qwrap{max-width:640px}
 .qhdr{margin-bottom:20px}
 .qtitle{font-family:var(--fh);font-size:17px;font-weight:700;margin-bottom:4px}
@@ -118,7 +118,6 @@ body{font-family:var(--fb);background:var(--bg);color:var(--tx);line-height:1.6}
 .btn-qnext{background:var(--brand);color:#fff;border:none;padding:10px 24px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
 .btn-qnext:hover{background:var(--brand2)}
 .btn-qnext:disabled{background:var(--br);cursor:not-allowed;color:var(--txl)}
-/* RESULT */
 .qresult{text-align:center;padding:28px 20px}
 .sring{width:96px;height:96px;border-radius:50%;margin:0 auto 18px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:4px solid var(--brand)}
 .sring.fail{border-color:#e05252}
@@ -138,7 +137,6 @@ body{font-family:var(--fb);background:var(--bg);color:var(--tx);line-height:1.6}
 .btn-nxtm{background:var(--brand);color:#fff;border:none;padding:10px 26px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
 .btn-nxtm:hover{background:var(--brand2)}
 .btn-nxtm:disabled{background:var(--br);cursor:not-allowed;color:var(--txl)}
-/* CONTENT NAV */
 .cnav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:20px;border-top:1px solid var(--br)}
 .btn-prev{background:var(--wh);color:var(--txm);border:1.5px solid var(--br);padding:10px 22px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
 .btn-prev:disabled{opacity:.35;cursor:not-allowed}
@@ -203,223 +201,136 @@ const CFG = {
   demoToken: 'DEMO2025',
   scriptUrl: 'https://script.google.com/macros/s/AKfycbyd06IWe5CREEZ5l1MnG5X41DUlTQV-ZwSXp5dbUrbiJZVlbhnxFSfKdfgsT59Y1NebcQ/exec'
 };
-const DEMO={nama:'Rina Kusuma',email:'demo@akademi.id',kursus:'UI/UX Design Bootcamp',expDate:'31 Des 2025',progress:[true,true,true,true,false,false,false,false,false,false]};
 
-const MODS=[
+// ================================================================
+// FETCH HELPERS (sama seperti admin.html)
+// ================================================================
+async function apiFetch(params) {
+  const url = CFG.scriptUrl + '?' + new URLSearchParams(params);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+
+async function apiPost(body) {
+  const res = await fetch(CFG.scriptUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+
+// ================================================================
+// STATE
+// ================================================================
+let curMod = 0, curTab = 'video', progress = [], QS = {};
+let currentUser = null;
+let currentMods = [];
+
+// Demo data sebagai fallback
+const DEMO_MODS = [
  {id:1,title:'Pengantar UI/UX Design',dur:'24 min',sec:'Dasar-Dasar',
   video:{url:'https://www.youtube.com/embed/dQw4w9WgXcQ',cap:'Pengantar UI/UX — 24:37'},
   pdf:{nama:'Slide Modul 1.pdf',url:'#',size:'2.4 MB',hal:18},
-  teks:`<h3>Apa itu UI/UX Design?</h3><p><strong>UI (User Interface)</strong> adalah tampilan visual produk digital — tombol, warna, tipografi. <strong>UX (User Experience)</strong> adalah keseluruhan pengalaman saat berinteraksi dengan produk.</p><div class="hl">UI/UX Designer memastikan produk tidak hanya menarik tapi juga mudah digunakan dan memberikan solusi nyata.</div><h3>Mengapa penting?</h3><ul><li>Pengguna menilai produk hanya dalam <strong>5–7 detik</strong></li><li>UX baik meningkatkan konversi hingga <strong>200–400%</strong></li><li>Biaya perbaikan di akhir <strong>100x lebih mahal</strong></li></ul>`,
-  quiz:[
-   {q:'Apa kepanjangan dari UX?',opts:['User Xperience','User Experience','Ultra Experience','Unique Experience'],ans:1,exp:'UX adalah User Experience — keseluruhan pengalaman pengguna saat berinteraksi dengan produk.'},
-   {q:'Manakah yang termasuk elemen UI?',opts:['Alur navigasi','Kecepatan loading','Warna tombol dan tipografi','Kepuasan pengguna'],ans:2,exp:'UI mencakup elemen visual: warna, tipografi, tombol, tata letak — semua yang dilihat dan diklik pengguna.'},
-   {q:'Berapa detik pengguna menilai produk digital?',opts:['1–2 detik','3–4 detik','5–7 detik','10–15 detik'],ans:2,exp:'Rata-rata pengguna hanya butuh 5–7 detik untuk menilai kesan pertama sebuah produk digital.'},
-  ]},
- {id:2,title:'Design Thinking',dur:'31 min',sec:'Dasar-Dasar',
-  video:{url:'',cap:'Design Thinking 5 Tahap — 31:20'},
-  pdf:{nama:'Slide Modul 2.pdf',url:'#',size:'3.1 MB',hal:24},
-  teks:`<h3>5 Tahap Design Thinking</h3><p>Metodologi human-centered untuk memecahkan masalah kompleks secara empatis dan iteratif.</p><ul><li><strong>Empathize</strong> — Pahami pengguna lewat riset</li><li><strong>Define</strong> — Rumuskan masalah utama</li><li><strong>Ideate</strong> — Brainstorm solusi sebanyak mungkin</li><li><strong>Prototype</strong> — Buat versi kasar solusi terbaik</li><li><strong>Test</strong> — Uji dengan pengguna nyata</li></ul><div class="hl">Design Thinking bukan proses linear — kamu bisa kembali ke tahap mana pun saat mendapat insight baru.</div>`,
-  quiz:[
-   {q:'Berapa tahap dalam Design Thinking?',opts:['3','4','5','6'],ans:2,exp:'Design Thinking memiliki 5 tahap: Empathize, Define, Ideate, Prototype, dan Test.'},
-   {q:'Tahap mana yang berfokus memahami pengguna?',opts:['Define','Prototype','Ideate','Empathize'],ans:3,exp:'Empathize adalah tahap pertama — melakukan riset dan observasi untuk memahami kebutuhan dan masalah pengguna.'},
-   {q:'Apa yang dilakukan di tahap Prototype?',opts:['Survei pengguna','Membuat versi kasar solusi','Mendefinisikan masalah','Usability test'],ans:1,exp:'Prototype adalah membuat representasi kasar solusi untuk diuji sebelum build produk penuh.'},
-  ]},
- {id:3,title:'User Research',dur:'42 min',sec:'Riset & Analisis',
-  video:{url:'',cap:'User Research Methods — 42:15'},
-  pdf:{nama:'Template Interview.pdf',url:'#',size:'1.2 MB',hal:8},
-  teks:`<h3>Mengapa Riset Penting?</h3><p>Riset membantu memvalidasi asumsi dan membangun produk yang benar-benar dibutuhkan pengguna.</p><h3>Metode Populer</h3><ul><li><strong>User Interview</strong> — Wawancara 1:1 insight mendalam</li><li><strong>Survey</strong> — Data kuantitatif banyak responden</li><li><strong>Usability Testing</strong> — Amati pengguna memakai produk</li><li><strong>Card Sorting</strong> — Pahami mental model pengguna</li></ul>`,
-  quiz:[
-   {q:'Metode riset terbaik untuk insight mendalam?',opts:['Survey online','User Interview','Heatmap','Analytics'],ans:1,exp:'User Interview (1:1) memberikan insight paling mendalam karena memungkinkan eksplorasi lebih jauh pada setiap jawaban.'},
-   {q:'Apa tujuan Usability Testing?',opts:['Data demografis','Mengamati pengguna menggunakan produk','Menghitung klik','Membuat persona'],ans:1,exp:'Usability Testing: mengamati pengguna nyata menyelesaikan tugas dengan produk kita untuk menemukan hambatan.'},
-  ]},
- {id:4,title:'Wireframing Figma',dur:'55 min',sec:'Riset & Analisis',
-  video:{url:'',cap:'Wireframing — 55:00'},
-  pdf:{nama:'Wireframe Kit.pdf',url:'#',size:'5.6 MB',hal:32},
-  teks:`<h3>Apa itu Wireframe?</h3><p>Wireframe adalah sketsa antarmuka — fokus pada struktur dan fungsi, bukan estetika. Ibarat blueprint bangunan sebelum didekorasi.</p><h3>Low vs High Fidelity</h3><ul><li><strong>Low Fidelity</strong> — Sketsa grayscale, cepat dan murah</li><li><strong>High Fidelity</strong> — Mendekati tampilan final</li></ul>`,
-  quiz:[
-   {q:'Apa fokus utama wireframe?',opts:['Warna dan font','Struktur dan fungsi halaman','Animasi','Kode'],ans:1,exp:'Wireframe fokus pada struktur tata letak dan fungsi navigasi, bukan estetika visual.'},
-   {q:'Kapan membuat High Fidelity Wireframe?',opts:['Awal project','Sebelum riset','Setelah riset dan struktur divalidasi','Saat sudah ada kode'],ans:2,exp:'High Fidelity dibuat setelah riset dan struktur dasar divalidasi karena lebih mahal untuk diubah.'},
-  ]},
- {id:5,title:'Prototyping & Interaction',dur:'48 min',sec:'Design & Prototyping',
-  video:{url:'',cap:'Prototyping Figma — 48:22'},
-  pdf:{nama:'Slide Prototyping.pdf',url:'#',size:'4.2 MB',hal:28},
-  teks:`<h3>Prototype vs Mockup</h3><p>Mockup adalah representasi statis tampilan final. Prototype memiliki interaksi — bisa diklik dan dinavigasi seperti produk nyata.</p><div class="hl">Tujuan prototype bukan produk sempurna, tapi mendapat feedback secepat mungkin dengan biaya seminimal mungkin.</div>`,
-  quiz:[
-   {q:'Perbedaan utama prototype dengan mockup?',opts:['Prototype lebih indah','Prototype punya interaksi yang bisa diklik','Mockup lebih detail','Tidak ada beda'],ans:1,exp:'Prototype punya interaksi (bisa diklik dan dinavigasi), mockup hanya representasi statis.'},
-   {q:'Tujuan utama membuat prototype?',opts:['Mengesankan klien','Mendapat feedback lebih cepat sebelum build','Menggantikan coding','Dokumentasi teknis'],ans:1,exp:'Prototype dibuat untuk mendapat feedback sebelum masuk fase pengembangan yang lebih mahal.'},
-  ]},
- {id:6,title:'Visual Design Principles',dur:'38 min',sec:'Design & Prototyping',locked:true,video:{url:'',cap:''},pdf:{nama:'',url:'',size:'',hal:0},teks:'',quiz:[]},
- {id:7,title:'Usability Testing',dur:'35 min',sec:'Testing',locked:true,video:{url:'',cap:''},pdf:{nama:'',url:'',size:'',hal:0},teks:'',quiz:[]},
- {id:8,title:'Accessibility Design',dur:'28 min',sec:'Testing',locked:true,video:{url:'',cap:''},pdf:{nama:'',url:'',size:'',hal:0},teks:'',quiz:[]},
- {id:9,title:'Design Handoff',dur:'30 min',sec:'Finishing',locked:true,video:{url:'',cap:''},pdf:{nama:'',url:'',size:'',hal:0},teks:'',quiz:[]},
- {id:10,title:'Final Project',dur:'60 min',sec:'Finishing',locked:true,video:{url:'',cap:''},pdf:{nama:'',url:'',size:'',hal:0},teks:'',quiz:[]},
+  teks:`<h3>Apa itu UI/UX Design?</h3><p><strong>UI (User Interface)</strong> adalah tampilan visual produk digital. <strong>UX (User Experience)</strong> adalah keseluruhan pengalaman pengguna.</p>`,
+  quiz:[{q:'Apa kepanjangan dari UX?',opts:['User Xperience','User Experience','Ultra Experience','Unique Experience'],ans:1,exp:'UX = User Experience.'}]},
+ {id:2,title:'Design Thinking',dur:'31 min',sec:'Dasar-Dasar',locked:true,
+  video:{url:'',cap:''},pdf:{nama:'',url:'',size:'',hal:0},teks:'',quiz:[]},
 ];
 
-let curMod=0,curTab='video',progress=[],QS={};
-// Fungsi JSONP untuk GET (tidak kena CORS)
-function jsonpRequest(url) {
-  return new Promise((resolve, reject) => {
-    const callback = 'jsonp_callback_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
-    const script = document.createElement('script');
-    
-    const separator = url.includes('?') ? '&' : '?';
-    script.src = url + separator + 'callback=' + callback;
-    
-    window[callback] = function(data) {
-      delete window[callback];
-      document.body.removeChild(script);
-      resolve(data);
-    };
-    
-    script.onerror = function() {
-      delete window[callback];
-      document.body.removeChild(script);
-      reject(new Error('JSONP request failed'));
-    };
-    
-    document.body.appendChild(script);
-  });
-}
-
-// Fungsi untuk GET data dari server - PAKAI JSONP
-async function fetchData(action, params = {}) {
-  if (!CFG.scriptUrl || CFG.scriptUrl.includes('YOUR_SCRIPT_ID')) {
-    console.warn('Script URL not configured');
-    return null;
-  }
-  
-  let url = CFG.scriptUrl + '?action=' + action;
-  Object.keys(params).forEach(key => {
-    url += '&' + encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
-  });
-  
-  try {
-    const data = await jsonpRequest(url);
-    return data;
-  } catch (error) {
-    console.error('Fetch error:', error);
-    showToast('Gagal mengambil data: ' + error.message);
-    return null;
-  }
-}
-
-// POST tetap pakai no-cors
-async function postData(action, data) {
-  if (!CFG.scriptUrl || CFG.scriptUrl.includes('YOUR_SCRIPT_ID')) {
-    console.warn('Script URL not configured');
-    return { success: false, error: 'URL not configured' };
-  }
-  
-  try {
-    await fetch(CFG.scriptUrl, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        action: action,
-        ...data
-      })
-    });
-    
-    return { success: true, message: 'Request sent' };
-  } catch (error) {
-    console.error('POST error:', error);
-    return { success: false, error: error.message };
-  }
-}
-
-  
-// Ganti fungsi doLogin
+// ================================================================
+// LOGIN
+// ================================================================
 async function doLogin() {
   const email = document.getElementById('lemail').value.trim().toLowerCase();
   const token = document.getElementById('ltoken').value.trim().toUpperCase();
   
-  // Cek demo dulu
+  // Demo account
   if (email === CFG.demoEmail && token === CFG.demoToken) {
-    initApp({...DEMO});
+    initAppWithData({
+      nama: 'Rina Kusuma',
+      email: email,
+      kursus: 'UI/UX Design Bootcamp',
+      expDate: '31 Des 2025',
+      progress: [true, false, false, false, false]
+    }, DEMO_MODS);
     return;
   }
   
-  // Cek ke server
-  showToast('Memeriksa akses...');
-  const result = await fetchData('checkAccess', { email: email, token: token });
+  showToast('⏳ Memeriksa akses...');
   
-  if (result && result.valid && result.user) {
-    // Login sukses - ambil data dari server
-    const user = result.user;
+  try {
+    // Cek akses ke server
+    const result = await apiFetch({ action: 'checkAccess', email: email, token: token });
     
-    // Load materi untuk kursus ini
-    const materiData = await fetchData('getMateri', { kursusId: user.kursusId });
-    
-    if (materiData && materiData.materi) {
-      // Konversi data dari server ke format MODS
-      const serverMods = materiData.materi.map(mod => ({
-        id: mod.id,
-        title: mod.judul,
-        dur: mod.durasi + ' min',
-        sec: mod.section || 'Modul',
-        locked: mod.terkunci || false,
-        video: { url: mod.videoUrl || '', cap: mod.judul },
-        pdf: { 
-          nama: mod.pdfUrl ? 'Materi ' + mod.judul + '.pdf' : '', 
-          url: mod.pdfUrl || '#', 
-          size: '1 MB', 
-          hal: 10 
-        },
-        teks: mod.teks || '<p>Konten sedang disiapkan.</p>',
-        quiz: mod.quiz || []
-      }));
+    if (result && result.valid && result.user) {
+      const user = result.user;
       
-      // Gunakan data dari server
-      window.MODS_SERVER = serverMods;
-      initApp({
-        nama: user.nama,
-        email: user.email,
-        kursus: user.kursus,
-        expDate: user.expDate,
-        progress: user.progress || []
-      });
+      // Load materi untuk kursus ini
+      const materiData = await apiFetch({ action: 'getMateri', kursusId: user.kursusId });
+      
+      if (materiData && materiData.materi && materiData.materi.length) {
+        const serverMods = materiData.materi.map(mod => ({
+          id: mod.id,
+          title: mod.judul,
+          dur: mod.durasi + ' min',
+          sec: mod.section || 'Modul',
+          locked: mod.terkunci || false,
+          video: { url: mod.videoUrl || '', cap: mod.judul },
+          pdf: { 
+            nama: mod.pdfUrl ? 'Materi ' + mod.judul + '.pdf' : '', 
+            url: mod.pdfUrl || '#', 
+            size: '1 MB', 
+            hal: 10 
+          },
+          teks: mod.teks || '<p>Konten sedang disiapkan.</p>',
+          quiz: mod.quiz || []
+        }));
+        
+        initAppWithData({
+          nama: user.nama,
+          email: user.email,
+          kursus: user.kursus,
+          expDate: user.expDate,
+          progress: user.progress || []
+        }, serverMods);
+      } else {
+        initAppWithData({
+          nama: user.nama,
+          email: user.email,
+          kursus: user.kursus,
+          expDate: user.expDate,
+          progress: []
+        }, DEMO_MODS);
+      }
     } else {
-      // Fallback ke demo
-      initApp({
-        nama: user.nama,
-        email: user.email,
-        kursus: user.kursus,
-        expDate: user.expDate,
-        progress: []
-      });
+      document.getElementById('lerr').style.display = 'block';
+      if (result && result.reason === 'expired') {
+        document.getElementById('lerr').textContent = 'Akses sudah kadaluarsa. Hubungi admin.';
+      }
     }
-  } else {
-    document.getElementById('lerr').style.display = 'block';
-    if (result && result.reason === 'expired') {
-      document.getElementById('lerr').textContent = 'Akses sudah kadaluarsa. Hubungi admin.';
-    } else {
-      document.getElementById('lerr').textContent = 'Email atau token tidak valid.';
-    }
+  } catch (err) {
+    console.error('Login error:', err);
+    showToast('Gagal koneksi ke server: ' + err.message);
   }
 }
-function doLogout(){document.getElementById('appEl').classList.remove('on');document.getElementById('lw').style.display='flex';document.getElementById('ltoken').value='';}
-// Ganti fungsi initApp
-function initApp(u) {
-  // Gunakan MODS dari server jika ada, else pakai demo MODS
-  const useMods = window.MODS_SERVER || MODS;
-  
-  // Override MODS global
-  window.currentMods = useMods;
+
+function initAppWithData(user, mods) {
+  currentUser = user;
+  currentMods = mods;
   
   // Inisialisasi progress
-  if (u.progress && u.progress.length > 0) {
-    progress = u.progress;
+  if (user.progress && user.progress.length > 0) {
+    progress = user.progress;
   } else {
-    // Progress default: semua false kecuali modul pertama
-    progress = new Array(useMods.length).fill(false);
-    progress[0] = true; // Modul pertama terbuka
+    progress = new Array(mods.length).fill(false);
+    progress[0] = true;
   }
   
-  // Set locked status berdasarkan progress
-  useMods.forEach((mod, idx) => {
+  // Set locked status
+  currentMods.forEach((mod, idx) => {
     if (idx > 0 && !progress[idx-1]) {
       mod.locked = true;
     } else {
@@ -427,42 +338,50 @@ function initApp(u) {
     }
   });
   
+  // Load quiz state dari localStorage
   QS = {};
-  
-  // Load QS dari localStorage jika ada
-  const savedQS = localStorage.getItem('quiz_state_' + u.email);
+  const savedQS = localStorage.getItem('quiz_state_' + user.email);
   if (savedQS) {
-    try {
-      Object.assign(QS, JSON.parse(savedQS));
-    } catch(e) {}
+    try { Object.assign(QS, JSON.parse(savedQS)); } catch(e) {}
   }
   
   document.getElementById('lw').style.display = 'none';
   document.getElementById('appEl').classList.add('on');
   
-  const ini = u.nama.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+  const ini = user.nama.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
   document.getElementById('uAv').textContent = ini;
-  document.getElementById('uName').textContent = u.nama;
-  document.getElementById('uCourse').textContent = u.kursus;
-  document.getElementById('expDate').textContent = 's.d. ' + u.expDate;
+  document.getElementById('uName').textContent = user.nama;
+  document.getElementById('uCourse').textContent = user.kursus;
+  document.getElementById('expDate').textContent = 's.d. ' + user.expDate;
   
   updateProg();
   renderSb();
   loadMod(0);
-  
-  // Simpan data user untuk referensi
-  window.currentUser = u;
 }
-function updateProg(){
- const d=progress.filter(Boolean).length,t=progress.length;
- document.getElementById('progTxt').textContent=d+'/'+t+' modul';
- document.getElementById('progBar').style.width=Math.round(d/t*100)+'%';
+
+function doLogout() {
+  document.getElementById('appEl').classList.remove('on');
+  document.getElementById('lw').style.display = 'flex';
+  document.getElementById('ltoken').value = '';
+  currentUser = null;
+  currentMods = [];
+  progress = [];
+  QS = {};
 }
-// Update renderSb
+
+// ================================================================
+// RENDER FUNCTIONS (menggunakan currentMods)
+// ================================================================
+function updateProg() {
+  const d = progress.filter(Boolean).length;
+  const t = progress.length;
+  document.getElementById('progTxt').textContent = d + '/' + t + ' modul';
+  document.getElementById('progBar').style.width = Math.round(d / t * 100) + '%';
+}
+
 function renderSb() {
-  let sec = '';
-  let html = '';
-  const mods = window.currentMods || MODS;
+  let sec = '', html = '';
+  const mods = currentMods;
   
   mods.forEach((m, i) => {
     if (m.sec !== sec) {
@@ -485,9 +404,9 @@ function renderSb() {
   
   document.getElementById('mList').innerHTML = html;
 }
-// Ganti fungsi loadMod dengan ini:
+
 function loadMod(i) {
-  const mods = window.currentMods || MODS;  // ← tambahkan ini
+  const mods = currentMods;
   if (mods[i].locked) {
     showToast('🔒 Selesaikan modul sebelumnya dulu');
     return;
@@ -500,9 +419,9 @@ function loadMod(i) {
   document.getElementById('ca').scrollTop = 0;
   if (window.innerWidth < 769) document.getElementById('sbEl').classList.remove('open');
 }
-// Ganti fungsi renderContent dengan ini:
+
 function renderContent() {
-  const mods = window.currentMods || MODS;  // ← tambahkan ini
+  const mods = currentMods;
   const m = mods[curMod];
   const done = progress[curMod];
   const qs = QS[curMod] || {};
@@ -533,9 +452,9 @@ function renderContent() {
   `;
   renderTab();
 }
-// Ganti fungsi renderTab dengan ini:
+
 function renderTab() {
-  const mods = window.currentMods || MODS;  // ← tambahkan ini
+  const mods = currentMods;
   const m = mods[curMod];
   const body = document.getElementById('tabBody');
   
@@ -550,12 +469,14 @@ function renderTab() {
     renderQuiz();
   }
 }
-function switchTab(t){curTab=t;renderContent();}
 
-/* ======= QUIZ ENGINE ======= */
-// Ganti fungsi renderQuiz dengan ini:
+function switchTab(t) { curTab = t; renderContent(); }
+
+// ================================================================
+// QUIZ ENGINE
+// ================================================================
 function renderQuiz() {
-  const mods = window.currentMods || MODS;  // ← tambahkan ini
+  const mods = currentMods;
   const m = mods[curMod];
   const qs = QS[curMod] || {};
   const body = document.getElementById('tabBody');
@@ -592,9 +513,9 @@ function renderQuiz() {
       </div>
     </div>`;
 }
-// Ganti fungsi ansQ dengan ini:
+
 function ansQ(idx) {
-  const mods = window.currentMods || MODS;  // ← tambahkan ini
+  const mods = currentMods;
   const m = mods[curMod];
   const qs = QS[curMod] || { current: 0, correct: 0, answers: [] };
   const qi = qs.current || 0;
@@ -622,8 +543,10 @@ function ansQ(idx) {
   btnNext.disabled = false;
   btnNext.textContent = qi === m.quiz.length - 1 ? 'Lihat Hasil →' : 'Lanjut →';
 }
-function nextQ() {
-  const m = window.currentMods[curMod];
+
+async function nextQ() {
+  const mods = currentMods;
+  const m = mods[curMod];
   const qs = QS[curMod] || {};
   const qi = (qs.current || 0) + 1;
   
@@ -641,26 +564,29 @@ function nextQ() {
     
     if (passed) {
       progress[curMod] = true;
-      if (curMod + 1 < window.currentMods.length) {
-        window.currentMods[curMod + 1].locked = false;
+      if (curMod + 1 < currentMods.length) {
+        currentMods[curMod + 1].locked = false;
       }
       updateProg();
       
       // Simpan progress ke server
-      if (window.currentUser && window.currentUser.email) {
-        postData('updateProgress', {
-          email: window.currentUser.email,
-          moduleId: curMod + 1,
-          action: 'complete',
-          quizScore: pct
-        });
+      if (currentUser && currentUser.email) {
+        try {
+          await apiPost({
+            action: 'updateProgress',
+            email: currentUser.email,
+            moduleId: curMod + 1,
+            actionType: 'complete',
+            quizScore: pct
+          });
+        } catch(e) { console.error('Save progress error:', e); }
       }
     }
     
-    // Simpan state ke localStorage
-    if (window.currentUser) {
-      localStorage.setItem('quiz_state_' + window.currentUser.email, JSON.stringify(QS));
-      localStorage.setItem('progress_' + window.currentUser.email, JSON.stringify(progress));
+    // Simpan ke localStorage
+    if (currentUser) {
+      localStorage.setItem('quiz_state_' + currentUser.email, JSON.stringify(QS));
+      localStorage.setItem('progress_' + currentUser.email, JSON.stringify(progress));
     }
     
     renderContent();
@@ -669,10 +595,9 @@ function nextQ() {
     renderContent();
   }
 }
-function renderResult(body,m,qs){
-  const mods = window.currentMods || MODS;  // ← tambahkan ini
+
+function renderResult(body, m, qs) {
   const pass = qs.passed;
-  
   body.innerHTML = `
     <div class="qwrap"><div class="qresult">
       <div class="sring ${pass ? 'pass' : 'fail'}"><div class="spct">${qs.pct}%</div><div class="slbl">skor</div></div>
@@ -685,48 +610,43 @@ function renderResult(body,m,qs){
       </div>
       <div>
         <button class="btn-retry" onclick="retryQuiz()">↺ Ulangi Kuis</button>
-        <button class="btn-nxtm" onclick="nextMod()" ${!pass || curMod === mods.length - 1 ? 'disabled' : ''}>Modul Berikutnya →</button>
+        <button class="btn-nxtm" onclick="nextMod()" ${!pass || curMod === currentMods.length - 1 ? 'disabled' : ''}>Modul Berikutnya →</button>
       </div>
     </div></div>`;
 }
-function retryQuiz(){QS[curMod]={attempts:(QS[curMod]||{}).attempts||0,correct:0,current:0,answers:[],showResult:false};renderContent();}
-// Update fungsi markDone
+
+function retryQuiz() {
+  QS[curMod] = { attempts: (QS[curMod] || {}).attempts || 0, correct: 0, current: 0, answers: [], showResult: false };
+  renderContent();
+}
+
 async function markDone() {
   progress[curMod] = true;
-  
-  // Buka modul berikutnya
-  if (curMod + 1 < window.currentMods.length) {
-    window.currentMods[curMod + 1].locked = false;
+  if (curMod + 1 < currentMods.length) {
+    currentMods[curMod + 1].locked = false;
   }
-  
   updateProg();
   showToast('Materi selesai! Ambil kuis untuk lanjut ke modul berikutnya 🎯');
   renderContent();
   renderSb();
   
-  // Simpan progress ke server
-  if (window.currentUser && window.currentUser.email) {
-    await postData('updateProgress', {
-      email: window.currentUser.email,
-      moduleId: curMod + 1,
-      action: 'complete'
-    });
-    
-    // Simpan juga ke localStorage
-    localStorage.setItem('progress_' + window.currentUser.email, JSON.stringify(progress));
-    localStorage.setItem('quiz_state_' + window.currentUser.email, JSON.stringify(QS));
+  if (currentUser && currentUser.email) {
+    try {
+      await apiPost({
+        action: 'updateProgress',
+        email: currentUser.email,
+        moduleId: curMod + 1,
+        actionType: 'complete'
+      });
+      localStorage.setItem('progress_' + currentUser.email, JSON.stringify(progress));
+    } catch(e) { console.error('Save error:', e); }
   }
 }
-function nextMod() {
-  const mods = window.currentMods || MODS;
-  if (curMod < mods.length - 1) loadMod(curMod + 1);
-}
 
-function prevMod() {
-  if (curMod > 0) loadMod(curMod - 1);
-}
-function toggleSb(){document.getElementById('sbEl').classList.toggle('open');}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),3200);}
+function nextMod() { if (curMod < currentMods.length - 1) loadMod(curMod + 1); }
+function prevMod() { if (curMod > 0) loadMod(curMod - 1); }
+function toggleSb() { document.getElementById('sbEl').classList.toggle('open'); }
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 3200); }
 </script>
 </body>
 </html>
