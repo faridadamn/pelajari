@@ -249,6 +249,10 @@ def main():
     careercontessa_modules = discover_course_tracks('/root/careercontessa_masterclass', 'cc')
     print(f"Career Contessa items compiled: {len(careercontessa_modules)}")
 
+    print("Auto-discovering & compiling Wes Roth AI Intelligence OS...")
+    wesroth_modules = discover_course_tracks('/root/wesroth_masterclass', 'wr')
+    print(f"Wes Roth items compiled: {len(wesroth_modules)}")
+
     courses_data = {
         "caleb": {
             "id": "caleb",
@@ -282,6 +286,17 @@ def main():
             "modules_count": 40,
             "total_items": len(careercontessa_modules),
             "modules": careercontessa_modules
+        },
+        "wesroth": {
+            "id": "wesroth",
+            "title": "Wes Roth AI Intelligence OS",
+            "short_title": "Wes Roth AI OS",
+            "subtitle": "The AI Frontier, Reasoning, Autonomous Systems & Hardware Economics OS",
+            "author": "Wes Roth",
+            "tracks_count": 8,
+            "modules_count": 40,
+            "total_items": len(wesroth_modules),
+            "modules": wesroth_modules
         }
     }
 
