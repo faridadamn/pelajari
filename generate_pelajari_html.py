@@ -5,6 +5,7 @@ Supports:
 - Caleb Ralston Masterclass OS (7 Tracks, 42 Items)
 - Alex Hormozi Business OS (8 Tracks, 48 Items)
 - 100% Crisp Inline SVG Icons (Zero Emojis Policy)
+- Icon-Only Prev/Next Navigation Buttons (Clean Minimalist UI)
 - WhatsApp Web Dark Theme Palette (#111b21, #202c33, #00a884, #005c4b, #e9edef)
 - Sepia & Light Themes
 - Client-Side Live Search & Filtering
@@ -753,7 +754,6 @@ html_content = r'''<!DOCTYPE html>
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      flex-wrap: wrap;
     }
 
     .btn-nav-module {
@@ -775,6 +775,17 @@ html_content = r'''<!DOCTYPE html>
     .btn-nav-module:hover {
       border-color: var(--accent-green);
       background: var(--bg-surface-elevated);
+    }
+
+    /* Icon-Only Navigation Buttons */
+    .btn-icon-nav {
+      padding: 0.65rem 0.95rem;
+      min-width: 46px;
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
     }
 
     .btn-complete-mod {
@@ -1245,10 +1256,15 @@ html_content = r'''<!DOCTYPE html>
       const isFirst = currentModuleIndex === 0;
       const isLast = currentModuleIndex === activeModules.length - 1;
 
+      // Icon-Only Navigation Buttons
       const footerHtml = `
         <div class="footer-nav">
           <div>
-            ${!isFirst ? `<button class="btn-nav-module" onclick="selectModule(${currentModuleIndex - 1})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Sebelumnya</button>` : ''}
+            ${!isFirst ? `
+              <button class="btn-nav-module btn-icon-nav" onclick="selectModule(${currentModuleIndex - 1})" title="Sebelumnya" aria-label="Sebelumnya">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              </button>
+            ` : ''}
           </div>
 
           <div>
@@ -1261,7 +1277,11 @@ html_content = r'''<!DOCTYPE html>
           </div>
 
           <div>
-            ${!isLast ? `<button class="btn-nav-module" onclick="selectModule(${currentModuleIndex + 1})">Selanjutnya <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>` : ''}
+            ${!isLast ? `
+              <button class="btn-nav-module btn-icon-nav" onclick="selectModule(${currentModuleIndex + 1})" title="Selanjutnya" aria-label="Selanjutnya">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            ` : ''}
           </div>
         </div>
       `;

@@ -15,9 +15,41 @@ OUT_DIR = "/root/pelajari"
 os.makedirs(OUT_DIR, exist_ok=True)
 
 # ------------------------------------------------------------------------------
+# LATEX & SPECIAL CHARACTER SANITIZER
+# ------------------------------------------------------------------------------
+def sanitize_latex(text):
+    # LaTeX Arrow Replacements
+    text = re.sub(r"\$\s*\\rightarrow\s*\$", "→", text)
+    text = re.sub(r"\\rightarrow", "→", text)
+    text = re.sub(r"\$\s*\\longrightarrow\s*\$", "→", text)
+    text = re.sub(r"\\longrightarrow", "→", text)
+    text = re.sub(r"\$\s*\\leftarrow\s*\$", "←", text)
+    text = re.sub(r"\\leftarrow", "←", text)
+    text = re.sub(r"\$\s*\\leftrightarrow\s*\$", "↔", text)
+    text = re.sub(r"\\leftrightarrow", "↔", text)
+    
+    # Operators & Symbols
+    text = re.sub(r"\\times", "×", text)
+    text = re.sub(r"\$\s*\\times\s*\$", "×", text)
+    text = re.sub(r"\\approx", "≈", text)
+    text = re.sub(r"\$\s*\\approx\s*\$", "≈", text)
+    
+    # Formatting commands
+    text = re.sub(r"\\text\{([^}]+)\}", r"\1", text)
+    text = re.sub(r"\\textbf\{([^}]+)\}", r"<strong>\1</strong>", text)
+    text = re.sub(r"\\frac\{([^}]+)\}\{([^}]+)\}", r"(\1 / \2)", text)
+    
+    # Strip unnecessary math markers
+    text = re.sub(r"\$\$([^$]+)\$\$", r"\1", text)
+    text = re.sub(r"\$([^$\n]+)\$", r"\1", text)
+    
+    return text
+
+# ------------------------------------------------------------------------------
 # MARKDOWN RENDERER
 # ------------------------------------------------------------------------------
 def format_inline(text):
+    text = sanitize_latex(text)
     text = html.escape(text)
     text = re.sub(r"\*\*(.*?)\*\*", r"<strong>\1</strong>", text)
     text = re.sub(r"\*(.*?)\*", r"<em>\1</em>", text)
