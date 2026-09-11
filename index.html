@@ -18,6 +18,8 @@
       --bg-surface: #202c33;
       --bg-surface-elevated: #222e35;
       --bg-code: #0c1317;
+      --text-code: #e9edef;
+      --border-code: #222d34;
       --border-color: #222d34;
       --border-subtle: #2a3942;
       --text-primary: #e9edef;
@@ -44,7 +46,9 @@
       --bg-base: #f7f1e3;
       --bg-surface: #ede4d1;
       --bg-surface-elevated: #e4d8c0;
-      --bg-code: #dfd2b8;
+      --bg-code: #ede0c7;
+      --text-code: #2d241e;
+      --border-code: #cfbe9f;
       --border-color: #d8c8ad;
       --border-subtle: #cfbe9f;
       --text-primary: #2d241e;
@@ -62,7 +66,9 @@
       --bg-base: #f0f2f5;
       --bg-surface: #ffffff;
       --bg-surface-elevated: #ffffff;
-      --bg-code: #e9edef;
+      --bg-code: #f3f5f7;
+      --text-code: #0f172a;
+      --border-code: #cbd5e1;
       --border-color: #d1d7db;
       --border-subtle: #e2e8f0;
       --text-primary: #111b21;
@@ -520,7 +526,7 @@
     /* Diagram / Code Blocks */
     .code-wrap {
       background: var(--bg-code);
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--border-code);
       border-radius: 10px;
       margin: 1.75rem 0;
       overflow: hidden;
@@ -562,7 +568,7 @@
       font-family: var(--font-mono);
       font-size: 0.85rem;
       line-height: 1.48;
-      color: #e9edef;
+      color: var(--text-code);
       white-space: pre;
     }
 
@@ -570,7 +576,7 @@
     .table-wrap {
       overflow-x: auto;
       margin: 1.75rem 0;
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--border-code);
       border-radius: 8px;
     }
 
@@ -702,7 +708,7 @@
 
     .modal-card {
       background: var(--bg-surface);
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--border-code);
       border-radius: 12px;
       width: 100%;
       max-width: 420px;
