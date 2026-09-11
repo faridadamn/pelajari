@@ -26,8 +26,8 @@ html_content = r'''<!DOCTYPE html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Pelajari — Multi-Course Masterclass OS</title>
-  <meta name="description" content="Platform Pembelajaran Masterclass: Caleb Ralston Audience Engine & Alex Hormozi $100M Business Architecture." />
+  <title>Pelajari — 3-Course Masterclass OS</title>
+  <meta name="description" content="Platform Pembelajaran Masterclass: Caleb Ralston Audience Engine, Alex Hormozi $100M Business Architecture, & Career Contessa Workplace OS." />
   
   <!-- Preload Web Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -975,8 +975,9 @@ html_content = r'''<!DOCTYPE html>
           <label class="course-label" for="course-select">PILIH MASTERCLASS</label>
           <div class="course-select-wrap">
             <select id="course-select" onchange="switchCourse(this.value)">
-              <option value="caleb">Caleb Ralston OS (7 Tracks)</option>
-              <option value="hormozi">Alex Hormozi Business OS (8 Tracks)</option>
+              <option value="caleb">Caleb Ralston OS (7 Tracks • 35 Modul)</option>
+              <option value="hormozi">Alex Hormozi Business OS (8 Tracks • 40 Modul)</option>
+              <option value="careercontessa">Career Contessa Workplace OS (8 Tracks • 40 Modul)</option>
             </select>
             <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
@@ -1147,7 +1148,10 @@ html_content = r'''<!DOCTYPE html>
       // Update subtitle & document title
       const subEl = document.getElementById('track-subtitle');
       if (subEl) {
-        if (courseId === 'hormozi') {
+        if (courseId === 'careercontessa') {
+          subEl.textContent = 'Career Contessa Workplace OS • 8 Tracks (Career Acceleration)';
+          document.title = 'Pelajari — Career Contessa: Workplace & Career Acceleration OS';
+        } else if (courseId === 'hormozi') {
           subEl.textContent = 'Alex Hormozi Business OS • 8 Tracks ($100M Architecture)';
           document.title = 'Pelajari — Alex Hormozi Business OS ($100M Architecture)';
         } else {

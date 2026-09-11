@@ -19,14 +19,14 @@ os.makedirs(OUT_DIR, exist_ok=True)
 # ------------------------------------------------------------------------------
 def sanitize_latex(text):
     # LaTeX Arrow Replacements
-    text = re.sub(r"\$\s*\\rightarrow\s*\$", "→", text)
-    text = re.sub(r"\\rightarrow", "→", text)
-    text = re.sub(r"\$\s*\\longrightarrow\s*\$", "→", text)
-    text = re.sub(r"\\longrightarrow", "→", text)
-    text = re.sub(r"\$\s*\\leftarrow\s*\$", "←", text)
-    text = re.sub(r"\\leftarrow", "←", text)
-    text = re.sub(r"\$\s*\\leftrightarrow\s*\$", "↔", text)
-    text = re.sub(r"\\leftrightarrow", "↔", text)
+    text = re.sub(r"\$\s*\\?n?r?ightarrow\s*\$", "→", text)
+    text = re.sub(r"\\?n?r?ightarrow", "→", text)
+    text = re.sub(r"\$\s*\\?longrightarrow\s*\$", "→", text)
+    text = re.sub(r"\\?longrightarrow", "→", text)
+    text = re.sub(r"\$\s*\\?leftarrow\s*\$", "←", text)
+    text = re.sub(r"\\?leftarrow", "←", text)
+    text = re.sub(r"\$\s*\\?leftrightarrow\s*\$", "↔", text)
+    text = re.sub(r"\\?leftrightarrow", "↔", text)
     
     # Operators & Symbols
     text = re.sub(r"\\times", "×", text)
@@ -245,6 +245,10 @@ def main():
     hormozi_modules = discover_course_tracks('/root/hormozi_masterclass', 'h')
     print(f"Hormozi items compiled: {len(hormozi_modules)}")
 
+    print("Auto-discovering & compiling Career Contessa Workplace OS...")
+    careercontessa_modules = discover_course_tracks('/root/careercontessa_masterclass', 'cc')
+    print(f"Career Contessa items compiled: {len(careercontessa_modules)}")
+
     courses_data = {
         "caleb": {
             "id": "caleb",
@@ -267,6 +271,17 @@ def main():
             "modules_count": 40,
             "total_items": len(hormozi_modules),
             "modules": hormozi_modules
+        },
+        "careercontessa": {
+            "id": "careercontessa",
+            "title": "Career Contessa Workplace OS",
+            "short_title": "Career Contessa OS",
+            "subtitle": "The Career & Workplace Acceleration OS (Interviews, Salary, Politics & Leadership)",
+            "author": "Career Contessa & Lauren McGoodwin",
+            "tracks_count": 8,
+            "modules_count": 40,
+            "total_items": len(careercontessa_modules),
+            "modules": careercontessa_modules
         }
     }
 
