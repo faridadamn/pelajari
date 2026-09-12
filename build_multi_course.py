@@ -253,6 +253,10 @@ def main():
     wesroth_modules = discover_course_tracks('/root/wesroth_masterclass', 'wr')
     print(f"Wes Roth items compiled: {len(wesroth_modules)}")
 
+    print("Auto-discovering & compiling Ali Abdaal Productivity OS...")
+    aliabdaal_modules = discover_course_tracks('/root/aliabdaal_masterclass', 'aa')
+    print(f"Ali Abdaal items compiled: {len(aliabdaal_modules)}")
+
     courses_data = {
         "caleb": {
             "id": "caleb",
@@ -297,6 +301,17 @@ def main():
             "modules_count": 40,
             "total_items": len(wesroth_modules),
             "modules": wesroth_modules
+        },
+        "aliabdaal": {
+            "id": "aliabdaal",
+            "title": "Ali Abdaal Productivity OS",
+            "short_title": "Ali Abdaal OS",
+            "subtitle": "The Productivity, Second Brain & Creator Solopreneur OS",
+            "author": "Ali Abdaal",
+            "tracks_count": 8,
+            "modules_count": 40,
+            "total_items": len(aliabdaal_modules),
+            "modules": aliabdaal_modules
         }
     }
 
