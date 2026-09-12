@@ -980,6 +980,7 @@ html_content = r'''<!DOCTYPE html>
               <option value="careercontessa">Career Contessa Workplace OS (8 Tracks • 40 Modul)</option>
               <option value="wesroth">Wes Roth AI Intelligence OS (8 Tracks • 40 Modul)</option>
               <option value="aliabdaal">Ali Abdaal Productivity OS (8 Tracks • 40 Modul)</option>
+              <option value="malakaproject">Malaka Project Masterclass OS (8 Tracks • 40 Modul)</option>
             </select>
             <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
@@ -1150,7 +1151,10 @@ html_content = r'''<!DOCTYPE html>
       // Update subtitle & document title
       const subEl = document.getElementById('track-subtitle');
       if (subEl) {
-        if (courseId === 'aliabdaal') {
+        if (courseId === 'malakaproject') {
+          subEl.textContent = 'Malaka Project Masterclass OS • 8 Tracks (Critical Thinking, Policy, Economics & Psychology)';
+          document.title = 'Pelajari — Malaka Project: The Critical Thinking, Public Policy & Socio-Economic Intelligence OS';
+        } else if (courseId === 'aliabdaal') {
           subEl.textContent = 'Ali Abdaal Productivity OS • 8 Tracks (Feel-Good Productivity, Second Brain & Solopreneur)';
           document.title = 'Pelajari — Ali Abdaal: The Productivity, Second Brain & Creator Solopreneur OS';
         } else if (courseId === 'wesroth') {

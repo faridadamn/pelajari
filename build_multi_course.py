@@ -257,6 +257,10 @@ def main():
     aliabdaal_modules = discover_course_tracks('/root/aliabdaal_masterclass', 'aa')
     print(f"Ali Abdaal items compiled: {len(aliabdaal_modules)}")
 
+    print("Auto-discovering & compiling Malaka Project Masterclass OS...")
+    malakaproject_modules = discover_course_tracks('/root/malakaproject_masterclass', 'mp')
+    print(f"Malaka Project items compiled: {len(malakaproject_modules)}")
+
     courses_data = {
         "caleb": {
             "id": "caleb",
@@ -312,6 +316,17 @@ def main():
             "modules_count": 40,
             "total_items": len(aliabdaal_modules),
             "modules": aliabdaal_modules
+        },
+        "malakaproject": {
+            "id": "malakaproject",
+            "title": "Malaka Project Masterclass OS",
+            "short_title": "Malaka Project OS",
+            "subtitle": "The Critical Thinking, Public Policy & Socio-Economic Intelligence OS",
+            "author": "Ferry Irwandi & Malaka Project",
+            "tracks_count": 8,
+            "modules_count": 40,
+            "total_items": len(malakaproject_modules),
+            "modules": malakaproject_modules
         }
     }
 
