@@ -265,6 +265,10 @@ def main():
     github_modules = discover_course_tracks('/root/github_masterclass', 'gh')
     print(f"GitHub items compiled: {len(github_modules)}")
 
+    print("Auto-discovering & compiling Cyber Defense & Security Operations OS...")
+    c3sa_modules = discover_course_tracks('/root/cyberdefense_masterclass', 'c3sa')
+    print(f"Cyber Defense items compiled: {len(c3sa_modules)}")
+
     courses_data = {
         "caleb": {
             "id": "caleb",
@@ -342,6 +346,17 @@ def main():
             "modules_count": 20,
             "total_items": len(github_modules),
             "modules": github_modules
+        },
+        "c3sa": {
+            "id": "c3sa",
+            "title": "Cyber Defense & Security Operations OS (C3SA / BTF)",
+            "short_title": "Cyber Defense OS (C3SA)",
+            "subtitle": "The Practical Blue Team, Network Forensics, Threat Hunting & Cloud SOC Masterclass",
+            "author": "CyberWarfare Labs & Farid Adam",
+            "tracks_count": 5,
+            "modules_count": 20,
+            "total_items": len(c3sa_modules),
+            "modules": c3sa_modules
         }
     }
 
