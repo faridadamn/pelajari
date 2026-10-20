@@ -26,8 +26,8 @@ html_content = r'''<!DOCTYPE html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Pelajari — 5-Course Masterclass OS</title>
-  <meta name="description" content="Platform Pembelajaran Masterclass: Caleb Ralston Audience Engine, Alex Hormozi $100M Architecture, Career Contessa Workplace OS, Wes Roth AI Frontier OS, & Ali Abdaal Productivity OS." />
+  <title>Pelajari — Masterclass OS Engineering, Business & Leadership</title>
+  <meta name="description" content="Platform Pembelajaran Masterclass OS: GitHub Professional Engineering & CI/CD, Caleb Ralston Audience Engine, Alex Hormozi $100M Architecture, Career Contessa Workplace OS, Wes Roth AI Frontier OS, & Ali Abdaal Productivity OS." />
   
   <!-- Preload Web Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -975,6 +975,7 @@ html_content = r'''<!DOCTYPE html>
           <label class="course-label" for="course-select">PILIH MASTERCLASS</label>
           <div class="course-select-wrap">
             <select id="course-select" onchange="switchCourse(this.value)">
+              <option value="github">GitHub Professional OS (4 Tracks • 20 Modul)</option>
               <option value="caleb">Caleb Ralston OS (7 Tracks • 35 Modul)</option>
               <option value="hormozi">Alex Hormozi Business OS (8 Tracks • 40 Modul)</option>
               <option value="careercontessa">Career Contessa Workplace OS (8 Tracks • 40 Modul)</option>
@@ -1151,7 +1152,10 @@ html_content = r'''<!DOCTYPE html>
       // Update subtitle & document title
       const subEl = document.getElementById('track-subtitle');
       if (subEl) {
-        if (courseId === 'malakaproject') {
+        if (courseId === 'github') {
+          subEl.textContent = 'GitHub Professional OS • 4 Tracks (CI/CD, Copilot & Project Ops)';
+          document.title = 'Pelajari — GitHub Professional OS: The Practical Engineering Masterclass';
+        } else if (courseId === 'malakaproject') {
           subEl.textContent = 'Malaka Project Masterclass OS • 8 Tracks (Critical Thinking, Policy, Economics & Psychology)';
           document.title = 'Pelajari — Malaka Project: The Critical Thinking, Public Policy & Socio-Economic Intelligence OS';
         } else if (courseId === 'aliabdaal') {

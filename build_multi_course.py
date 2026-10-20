@@ -261,6 +261,10 @@ def main():
     malakaproject_modules = discover_course_tracks('/root/malakaproject_masterclass', 'mp')
     print(f"Malaka Project items compiled: {len(malakaproject_modules)}")
 
+    print("Auto-discovering & compiling GitHub Professional OS...")
+    github_modules = discover_course_tracks('/root/github_masterclass', 'gh')
+    print(f"GitHub items compiled: {len(github_modules)}")
+
     courses_data = {
         "caleb": {
             "id": "caleb",
@@ -327,6 +331,17 @@ def main():
             "modules_count": 40,
             "total_items": len(malakaproject_modules),
             "modules": malakaproject_modules
+        },
+        "github": {
+            "id": "github",
+            "title": "GitHub Professional OS",
+            "short_title": "GitHub Professional OS",
+            "subtitle": "The Practical Engineering, CI/CD, Copilot & Project Architecture Masterclass",
+            "author": "GitHub & Ray Villalobos (Synthesized by Farid Adam)",
+            "tracks_count": 4,
+            "modules_count": 20,
+            "total_items": len(github_modules),
+            "modules": github_modules
         }
     }
 
