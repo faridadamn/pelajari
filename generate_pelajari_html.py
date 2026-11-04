@@ -975,6 +975,7 @@ html_content = r'''<!DOCTYPE html>
           <label class="course-label" for="course-select">PILIH MASTERCLASS</label>
           <div class="course-select-wrap">
             <select id="course-select" onchange="switchCourse(this.value)">
+              <option value="copywriting">Direct-Response Copywriting OS (5 Tracks • 20 Modul)</option>
               <option value="c3sa">Cyber Defense OS (C3SA / BTF • 5 Tracks • 20 Modul)</option>
               <option value="github">GitHub Professional OS (4 Tracks • 20 Modul)</option>
               <option value="caleb">Caleb Ralston OS (7 Tracks • 35 Modul)</option>
@@ -1153,7 +1154,10 @@ html_content = r'''<!DOCTYPE html>
       // Update subtitle & document title
       const subEl = document.getElementById('track-subtitle');
       if (subEl) {
-        if (courseId === 'c3sa') {
+        if (courseId === 'copywriting') {
+          subEl.textContent = 'Copywriting Masterclass OS • 5 Tracks (Direct-Response, Empathy & Anti-Slop)';
+          document.title = 'Pelajari — Direct-Response Copywriting & Conversion OS';
+        } else if (courseId === 'c3sa') {
           subEl.textContent = 'Cyber Defense OS • 5 Tracks (Blue Team, Network Forensics & Cloud SOC)';
           document.title = 'Pelajari — Cyber Defense & Security Operations OS (C3SA / BTF)';
         } else if (courseId === 'github') {

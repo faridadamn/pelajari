@@ -269,6 +269,10 @@ def main():
     c3sa_modules = discover_course_tracks('/root/cyberdefense_masterclass', 'c3sa')
     print(f"Cyber Defense items compiled: {len(c3sa_modules)}")
 
+    print("Auto-discovering & compiling Direct-Response Copywriting OS...")
+    copywriting_modules = discover_course_tracks('/root/copywriting_masterclass', 'cp')
+    print(f"Copywriting items compiled: {len(copywriting_modules)}")
+
     courses_data = {
         "caleb": {
             "id": "caleb",
@@ -357,6 +361,17 @@ def main():
             "modules_count": 20,
             "total_items": len(c3sa_modules),
             "modules": c3sa_modules
+        },
+        "copywriting": {
+            "id": "copywriting",
+            "title": "Direct-Response Copywriting & Conversion OS",
+            "short_title": "Copywriting Masterclass OS",
+            "subtitle": "The Direct-Response, Empathy Architecture, Conversion Funnel & Anti-Slop Writing OS",
+            "author": "Farid Adam & Direct-Response Practitioners",
+            "tracks_count": 5,
+            "modules_count": 20,
+            "total_items": len(copywriting_modules),
+            "modules": copywriting_modules
         }
     }
 
