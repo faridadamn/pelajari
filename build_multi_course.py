@@ -273,7 +273,22 @@ def main():
     copywriting_modules = discover_course_tracks('/root/copywriting_masterclass', 'cp')
     print(f"Copywriting items compiled: {len(copywriting_modules)}")
 
+    print("Auto-discovering & compiling Organic Storytelling & Direct Cash-Flow Funnel OS...")
+    storytelling_modules = discover_course_tracks('/root/storytelling_funnel_masterclass', 'st')
+    print(f"Storytelling items compiled: {len(storytelling_modules)}")
+
     courses_data = {
+        "storytelling": {
+            "id": "storytelling",
+            "title": "Organic Storytelling & Direct Cash-Flow Funnel OS",
+            "short_title": "Storytelling & Funnel OS",
+            "subtitle": "The Rizal Threads Affiliate Architecture, Miles Beckler Funnels & Faceless Creator Engine",
+            "author": "Farid Adam, Rizal Affiliate & Miles Beckler",
+            "tracks_count": 5,
+            "modules_count": 20,
+            "total_items": len(storytelling_modules),
+            "modules": storytelling_modules
+        },
         "caleb": {
             "id": "caleb",
             "title": "Caleb Ralston Masterclass OS",
