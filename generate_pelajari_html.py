@@ -975,6 +975,7 @@ html_content = r'''<!DOCTYPE html>
           <label class="course-label" for="course-select">PILIH MASTERCLASS</label>
           <div class="course-select-wrap">
             <select id="course-select" onchange="switchCourse(this.value)">
+              <option value="questioning">The Art of Questioning OS (1 Track • 4 Modul)</option>
               <option value="storytelling">Organic Storytelling & Funnel OS (5 Tracks • 20 Modul)</option>
               <option value="copywriting">Direct-Response Copywriting OS (5 Tracks • 20 Modul)</option>
               <option value="c3sa">Cyber Defense OS (C3SA / BTF • 5 Tracks • 20 Modul)</option>
@@ -1155,7 +1156,10 @@ html_content = r'''<!DOCTYPE html>
       // Update subtitle & document title
       const subEl = document.getElementById('track-subtitle');
       if (subEl) {
-        if (courseId === 'storytelling') {
+        if (courseId === 'questioning') {
+          subEl.textContent = 'The Art of High-Leverage Questioning OS • 1 Track (Arsitektur Berpikir, Kalibrasi Ego & Protokol Bertanya)';
+          document.title = 'Pelajari — The Art of High-Leverage Questioning & Executive Presence OS';
+        } else if (courseId === 'storytelling') {
           subEl.textContent = 'Organic Storytelling & Funnel OS • 5 Tracks (Threads Affiliate, Miles Beckler Funnels & Faceless Engine)';
           document.title = 'Pelajari — Organic Storytelling & Direct Cash-Flow Funnel OS';
         } else if (courseId === 'copywriting') {

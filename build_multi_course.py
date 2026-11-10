@@ -277,7 +277,22 @@ def main():
     storytelling_modules = discover_course_tracks('/root/storytelling_funnel_masterclass', 'st')
     print(f"Storytelling items compiled: {len(storytelling_modules)}")
 
+    print("Auto-discovering & compiling The Art of High-Leverage Questioning OS...")
+    questioning_modules = discover_course_tracks('/root/questioning_masterclass', 'q')
+    print(f"Questioning items compiled: {len(questioning_modules)}")
+
     courses_data = {
+        "questioning": {
+            "id": "questioning",
+            "title": "The Art of High-Leverage Questioning & Executive Presence OS",
+            "short_title": "The Art of Questioning OS",
+            "subtitle": "Arsitektur Berpikir, Kalibrasi Ego, dan Protokol Bertanya di Depan Audiens Ramai",
+            "author": "Farid Adam, Pandji Pragiwaksono & Career Communicators",
+            "tracks_count": 1,
+            "modules_count": 4,
+            "total_items": len(questioning_modules),
+            "modules": questioning_modules
+        },
         "storytelling": {
             "id": "storytelling",
             "title": "Organic Storytelling & Direct Cash-Flow Funnel OS",
