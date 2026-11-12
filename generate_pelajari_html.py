@@ -947,6 +947,631 @@ html_content = r'''<!DOCTYPE html>
       .current-module-badge { max-width: 180px; }
       #toast { left: 1rem; right: 1rem; bottom: 1.5rem; justify-content: center; }
     }
+
+    /* Learning Notes & Timeline System */
+    .tool-btn { position: relative; }
+    .tool-btn .notes-count-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--accent-green);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.1rem 0.38rem;
+      border-radius: 10px;
+      line-height: 1.2;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    /* In-Reader Module Notes Callout Banner */
+    .module-notes-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--accent-green);
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-family: var(--font-sans);
+    }
+    .notes-banner-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--text-primary);
+    }
+    .notes-banner-left svg {
+      color: var(--accent-green);
+      flex-shrink: 0;
+    }
+    .notes-banner-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+    .notes-banner-sub {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      margin-top: 0.15rem;
+    }
+    .btn-open-module-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: var(--accent-green-surface);
+      color: var(--accent-green);
+      border: 1px solid var(--accent-green);
+      border-radius: 7px;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      font-family: var(--font-sans);
+    }
+    .btn-open-module-note:hover {
+      background: var(--accent-green);
+      color: #ffffff;
+    }
+    .mod-note-pill-count {
+      background: var(--accent-green);
+      color: #fff;
+      font-size: 0.68rem;
+      padding: 0.1rem 0.35rem;
+      border-radius: 8px;
+    }
+    .btn-open-module-note:hover .mod-note-pill-count {
+      background: #ffffff;
+      color: var(--accent-green);
+    }
+
+    /* Notes Modal & Timeline Layout */
+    .notes-modal-card {
+      max-width: 680px;
+      width: 100%;
+      height: 92vh;
+      max-height: 860px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      overflow: hidden;
+    }
+    .notes-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .notes-header-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--accent-green-surface);
+      color: var(--accent-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .notes-modal-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+    .notes-modal-sub {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 0.1rem;
+    }
+
+    /* Filter & Search Bar */
+    .notes-filter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.75rem;
+    }
+    .notes-tabs {
+      display: flex;
+      gap: 0.35rem;
+    }
+    .notes-tab {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      border-radius: 6px;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: var(--font-sans);
+    }
+    .notes-tab.active {
+      background: var(--accent-green-surface);
+      color: var(--accent-green);
+      border-color: var(--accent-green);
+      font-weight: 600;
+    }
+    .notes-search-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 0.35rem 0.65rem;
+      flex: 1;
+      min-width: 160px;
+      max-width: 260px;
+    }
+    .notes-search-wrap svg {
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .notes-search-wrap input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      font-size: 0.8rem;
+      font-family: var(--font-sans);
+      width: 100%;
+    }
+
+    /* Note Composer Form */
+    .note-composer-card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+    .composer-context-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent-green);
+      font-family: var(--font-sans);
+    }
+    .composer-context-row svg { flex-shrink: 0; }
+    #note-composer-text {
+      width: 100%;
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: 7px;
+      padding: 0.65rem 0.75rem;
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.86rem;
+      line-height: 1.5;
+      resize: vertical;
+      min-height: 60px;
+      max-height: 150px;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+    #note-composer-text:focus { border-color: var(--accent-green); }
+
+    .attachment-preview-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      max-height: 100px;
+      overflow-y: auto;
+    }
+    .preview-thumb-box {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: var(--bg-base);
+      flex-shrink: 0;
+    }
+    .preview-thumb-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .preview-file-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 0.35rem 0.6rem;
+      font-size: 0.74rem;
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      max-width: 200px;
+    }
+    .preview-file-chip .preview-fname {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .btn-remove-preview {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .composer-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .composer-attach-tools {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-attach {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      border-radius: 6px;
+      padding: 0.4rem 0.7rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-sans);
+      transition: all 0.15s ease;
+    }
+    .btn-attach:hover { border-color: var(--accent-green); color: var(--accent-green); }
+    .attach-hint {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-family: var(--font-sans);
+    }
+    .btn-save-note {
+      background: var(--accent-green);
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.45rem 0.95rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-sans);
+      transition: background 0.15s ease;
+    }
+    .btn-save-note:hover { background: var(--accent-green-hover); }
+    .btn-save-note:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* Timeline Stream Layout */
+    .timeline-scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.5rem 0.25rem 0.5rem 0.5rem;
+    }
+    .timeline-stream {
+      position: relative;
+      margin-left: 0.85rem;
+      padding-left: 1.5rem;
+      border-left: 2px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+    .timeline-item {
+      position: relative;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: border-color 0.2s;
+    }
+    .timeline-item:hover { border-color: var(--accent-green); }
+    .timeline-node-dot {
+      position: absolute;
+      left: calc(-1.5rem - 6px);
+      top: 16px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 0 3px var(--bg-surface);
+    }
+    .timeline-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+    .timeline-mod-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--accent-green-surface);
+      color: var(--accent-green);
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .timeline-mod-pill:hover { opacity: 0.85; text-decoration: underline; }
+    .timeline-date-label {
+      font-size: 0.73rem;
+      color: var(--text-muted);
+    }
+    .timeline-body-text {
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-primary);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .timeline-body-text a {
+      color: var(--accent-green);
+      text-decoration: underline;
+    }
+
+    /* Auto-opening Photos & Files in Timeline */
+    .timeline-attachments-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.65rem;
+      margin-top: 0.25rem;
+    }
+    .timeline-img-card {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: var(--bg-base);
+      cursor: pointer;
+      max-height: 240px;
+    }
+    .timeline-img-card img {
+      width: 100%;
+      height: 100%;
+      max-height: 240px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.25s ease;
+    }
+    .timeline-img-card:hover img {
+      transform: scale(1.03);
+    }
+    .timeline-img-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.85));
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 0.6rem 0.6rem 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .timeline-img-card:hover .timeline-img-overlay {
+      opacity: 1;
+    }
+
+    /* Non-photo file attachment */
+    .timeline-file-attachment {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: 7px;
+      padding: 0.6rem 0.8rem;
+      text-decoration: none;
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      transition: border-color 0.15s;
+    }
+    .timeline-file-attachment:hover { border-color: var(--accent-green); }
+    .file-icon-box {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      background: var(--accent-green-surface);
+      color: var(--accent-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .file-meta-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      overflow: hidden;
+      flex: 1;
+    }
+    .file-display-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .file-size-badge {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+    .btn-open-file-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.74rem;
+      color: var(--accent-green);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .timeline-item-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding-top: 0.25rem;
+      border-top: 1px solid var(--border-subtle);
+      font-family: var(--font-sans);
+    }
+    .timeline-course-tag {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+    .btn-delete-note {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.72rem;
+      font-family: var(--font-sans);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+    .btn-delete-note:hover { color: #e74c3c; background: rgba(231, 76, 60, 0.1); }
+
+    /* Empty state */
+    .timeline-empty-state {
+      padding: 3rem 1rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--text-muted);
+      font-family: var(--font-sans);
+    }
+    .timeline-empty-state svg { color: var(--border-subtle); }
+    .empty-state-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .empty-state-desc {
+      font-size: 0.8rem;
+      max-width: 320px;
+      line-height: 1.4;
+    }
+
+    /* Lightbox Modal */
+    .lightbox-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(6px);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .lightbox-backdrop.open { display: flex; }
+    .lightbox-close-btn {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .lightbox-close-btn:hover { background: rgba(255, 255, 255, 0.25); }
+    .lightbox-content {
+      max-width: 95vw;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .lightbox-content img {
+      max-width: 95vw;
+      max-height: 84vh;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    }
+    .lightbox-caption {
+      color: #e9edef;
+      font-size: 0.85rem;
+      font-family: var(--font-sans);
+    }
+
+    @media (max-width: 600px) {
+      .notes-modal-card {
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+        padding: 1rem;
+      }
+      .module-notes-banner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .btn-open-module-note { width: 100%; justify-content: center; }
+      .timeline-attachments-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -1031,6 +1656,13 @@ html_content = r'''<!DOCTYPE html>
         </div>
 
         <div class="toolbar-right">
+          <!-- Learning Notes Timeline Button -->
+          <button class="tool-btn" id="btn-open-notes" title="Catatan Pembelajaran (Timeline)" onclick="openNotesModal()">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>Catatan</span>
+            <span class="notes-count-badge" id="notes-count-badge" style="display:none;">0</span>
+          </button>
+
           <!-- Font Size & Family Settings Button -->
           <button class="tool-btn" id="btn-open-typography" title="Pengaturan Tampilan">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
@@ -1098,6 +1730,90 @@ html_content = r'''<!DOCTYPE html>
           <button class="font-btn" data-width="840px">Lebar (840px)</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Learning Notes Timeline Modal -->
+  <div class="modal-backdrop" id="modal-notes">
+    <div class="modal-card notes-modal-card">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div class="notes-header-left">
+          <div class="notes-header-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div>
+            <div class="notes-modal-title">Timeline Catatan Pembelajaran</div>
+            <div class="notes-modal-sub" id="notes-scope-sub">Seluruh Catatan Lintas Masterclass</div>
+          </div>
+        </div>
+        <button class="sidebar-close-btn" style="display:block" onclick="closeNotesModal()" aria-label="Tutup Catatan">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Scope Filter & Search Bar -->
+      <div class="notes-filter-bar">
+        <div class="notes-tabs">
+          <button type="button" class="notes-tab active" id="tab-all-notes" onclick="setNotesFilter('all')">
+            Semua Timeline (<span id="count-all-notes">0</span>)
+          </button>
+          <button type="button" class="notes-tab" id="tab-module-notes" onclick="setNotesFilter('module')">
+            Modul Ini Saja (<span id="count-module-notes">0</span>)
+          </button>
+        </div>
+        <div class="notes-search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="notes-search-input" placeholder="Cari catatan..." oninput="handleNotesSearch(this.value)" />
+        </div>
+      </div>
+
+      <!-- Note Composer Card -->
+      <div class="note-composer-card">
+        <div class="composer-context-row">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="composer-context-label">The Art of Questioning OS › Modul 1</span>
+        </div>
+        <textarea id="note-composer-text" placeholder="Tulis insight, temuan penting, atau rangkuman lo di sini... (Bisa Paste gambar langsung!)" rows="3"></textarea>
+        
+        <!-- Attachment Previews (before upload) -->
+        <div class="attachment-preview-strip" id="composer-attachment-preview"></div>
+
+        <!-- Composer Actions -->
+        <div class="composer-actions">
+          <div class="composer-attach-tools">
+            <button type="button" class="btn-attach" onclick="document.getElementById('note-file-input').click()" title="Lampirkan foto atau file">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+              <span>Foto / File</span>
+            </button>
+            <input type="file" id="note-file-input" multiple accept="image/*,.pdf,.txt,.doc,.docx,.zip" style="display:none;" onchange="handleFileSelect(event)" />
+            <span class="attach-hint">Foto otomatis terbuka di browser • Maks 25MB</span>
+          </div>
+
+          <button type="button" class="btn-save-note" id="btn-save-note" onclick="submitNote()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span id="save-note-label">Simpan Catatan</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Timeline Scroll Area -->
+      <div class="timeline-scroll-area" id="timeline-scroll-area">
+        <div class="timeline-stream" id="timeline-stream">
+          <!-- Rendered Timeline Items injected via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Lightbox Modal for Auto-opening Photos in High Res -->
+  <div class="lightbox-backdrop" id="modal-lightbox" onclick="closeLightbox()">
+    <button type="button" class="lightbox-close-btn" onclick="closeLightbox()" aria-label="Tutup Foto">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+      <img id="lightbox-img" src="" alt="Preview Catatan" />
+      <div class="lightbox-caption" id="lightbox-caption"></div>
     </div>
   </div>
 
@@ -1322,9 +2038,28 @@ html_content = r'''<!DOCTYPE html>
         </div>
       `;
 
-      container.innerHTML = html + footerHtml;
+      // Module Learning Note CTA Banner
+      const noteBannerHtml = !mod.id.startsWith('overview') ? `
+        <div class="module-notes-banner">
+          <div class="notes-banner-left">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <div>
+              <div class="notes-banner-title">Catatan Pembelajaran Modul Ini</div>
+              <div class="notes-banner-sub">Simpan temuan, refleksi, tangkapan layar, atau dokumen lo di timeline</div>
+            </div>
+          </div>
+          <button type="button" class="btn-open-module-note" onclick="openNotesModal(true)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>Tulis / Buka Catatan</span>
+            <span class="mod-note-pill-count" id="mod-notes-badge" style="display:none;">0</span>
+          </button>
+        </div>
+      ` : '';
+
+      container.innerHTML = html + noteBannerHtml + footerHtml;
       window.scrollTo({ top: 0, behavior: 'instant' });
       renderNavigation();
+      if (typeof updateNotesBadges === 'function') updateNotesBadges();
     }
 
     function selectModule(idx) {
@@ -1493,6 +2228,523 @@ html_content = r'''<!DOCTYPE html>
       }
     });
 
+    // --------------------------------------------------------------------------
+    // LEARNING NOTES & TIMELINE ENGINE
+    // --------------------------------------------------------------------------
+    let appNotes = [];
+    let composerAttachments = [];
+    let notesFilterScope = 'all'; // 'all' or 'module'
+    let notesSearchQuery = '';
+
+    function initNotesSystem() {
+      // 1. Load from cache first for instant UI response
+      const cached = localStorage.getItem('pelajari_notes_cache');
+      if (cached) {
+        try {
+          appNotes = JSON.parse(cached);
+          updateNotesBadges();
+        } catch (e) {}
+      }
+
+      // 2. Fetch fresh notes from API
+      fetchNotesFromAPI();
+
+      // 3. Setup paste event for pasting screenshot / images
+      const composerEl = document.getElementById('note-composer-text');
+      if (composerEl) {
+        composerEl.addEventListener('paste', handleComposerPaste);
+      }
+
+      // 4. Modal outside click
+      const notesModal = document.getElementById('modal-notes');
+      if (notesModal) {
+        notesModal.addEventListener('click', (e) => {
+          if (e.target === notesModal) closeNotesModal();
+        });
+      }
+    }
+
+    async function fetchNotesFromAPI() {
+      try {
+        const res = await fetch('/pelajari/api/notes');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.ok && Array.isArray(data.notes)) {
+            appNotes = data.notes;
+            localStorage.setItem('pelajari_notes_cache', JSON.stringify(appNotes));
+            updateNotesBadges();
+            const modal = document.getElementById('modal-notes');
+            if (modal && modal.classList.contains('open')) {
+              renderTimeline();
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('[Notes] Offline / using local cache:', err);
+      }
+    }
+
+    function updateNotesBadges() {
+      const totalCount = appNotes.length;
+      const totalBadge = document.getElementById('notes-count-badge');
+      if (totalBadge) {
+        totalBadge.textContent = totalCount;
+        totalBadge.style.display = totalCount > 0 ? 'inline-block' : 'none';
+      }
+
+      const curMod = activeModules[currentModuleIndex];
+      if (curMod) {
+        const modCount = appNotes.filter(n => n.module_id === curMod.id).length;
+        const modBadge = document.getElementById('mod-notes-badge');
+        if (modBadge) {
+          modBadge.textContent = modCount;
+          modBadge.style.display = modCount > 0 ? 'inline-block' : 'none';
+        }
+        const countModEl = document.getElementById('count-module-notes');
+        if (countModEl) countModEl.textContent = modCount;
+      }
+
+      const countAllEl = document.getElementById('count-all-notes');
+      if (countAllEl) countAllEl.textContent = totalCount;
+    }
+
+    function openNotesModal(forCurrentModuleOnly) {
+      if (forCurrentModuleOnly) {
+        notesFilterScope = 'module';
+      }
+      updateNotesTabUI();
+
+      // Update composer context
+      const curMod = activeModules[currentModuleIndex];
+      const curCourse = courses[activeCourseId];
+      const contextEl = document.getElementById('composer-context-label');
+      if (contextEl && curMod && curCourse) {
+        contextEl.textContent = `${curCourse.short_title || curCourse.title} › ${curMod.title}`;
+      }
+
+      const modal = document.getElementById('modal-notes');
+      if (modal) modal.classList.add('open');
+      renderTimeline();
+      updateNotesBadges();
+    }
+
+    function closeNotesModal() {
+      const modal = document.getElementById('modal-notes');
+      if (modal) modal.classList.remove('open');
+    }
+
+    function setNotesFilter(scope) {
+      notesFilterScope = scope;
+      updateNotesTabUI();
+      renderTimeline();
+    }
+
+    function updateNotesTabUI() {
+      const tabAll = document.getElementById('tab-all-notes');
+      const tabMod = document.getElementById('tab-module-notes');
+      const subTitle = document.getElementById('notes-scope-sub');
+      const curMod = activeModules[currentModuleIndex];
+
+      if (notesFilterScope === 'module') {
+        if (tabAll) tabAll.classList.remove('active');
+        if (tabMod) tabMod.classList.add('active');
+        if (subTitle && curMod) subTitle.textContent = `Catatan Khusus: ${curMod.title}`;
+      } else {
+        if (tabAll) tabAll.classList.add('active');
+        if (tabMod) tabMod.classList.remove('active');
+        if (subTitle) subTitle.textContent = 'Seluruh Catatan Lintas Masterclass';
+      }
+    }
+
+    function handleNotesSearch(val) {
+      notesSearchQuery = (val || '').toLowerCase().trim();
+      renderTimeline();
+    }
+
+    // Attachments Handling
+    function handleComposerPaste(e) {
+      const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+      for (const item of items) {
+        if (item.type.indexOf('image') !== -1) {
+          const file = item.getAsFile();
+          if (file) {
+            uploadSingleFile(file);
+          }
+        }
+      }
+    }
+
+    function handleFileSelect(e) {
+      const files = e.target.files;
+      if (!files || files.length === 0) return;
+      for (let i = 0; i < files.length; i++) {
+        uploadSingleFile(files[i]);
+      }
+      e.target.value = '';
+    }
+
+    function uploadSingleFile(file) {
+      if (file.size > 25 * 1024 * 1024) {
+        showToast('File terlalu besar! Maksimal 25MB.');
+        return;
+      }
+
+      const reader = new FileReader();
+      const isImg = file.type.startsWith('image/');
+      
+      // Temporary placeholder in preview strip
+      const tempId = 'att_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+      const previewContainer = document.getElementById('composer-attachment-preview');
+      const loadingEl = document.createElement('div');
+      loadingEl.id = tempId;
+      loadingEl.className = isImg ? 'preview-thumb-box' : 'preview-file-chip';
+      loadingEl.innerHTML = `<span style="font-size:0.65rem; color:var(--text-muted); padding:4px;">Mengunggah...</span>`;
+      if (previewContainer) previewContainer.appendChild(loadingEl);
+
+      reader.onload = async function(evt) {
+        const base64Data = evt.target.result;
+        try {
+          const res = await fetch('/pelajari/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              filename: file.name,
+              data: base64Data
+            })
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.ok) {
+              const attObj = {
+                type: data.type || (isImg ? 'image' : 'file'),
+                url: data.url,
+                filename: data.filename,
+                original_name: file.name,
+                size: file.size,
+                mime: data.mime || file.type
+              };
+              composerAttachments.push(attObj);
+              renderComposerPreviews();
+              return;
+            }
+          }
+          throw new Error('Upload API failed');
+        } catch (err) {
+          console.warn('[Upload] Fallback to base64 inline attachment:', err);
+          // Offline fallback: save inline base64
+          const attObj = {
+            type: isImg ? 'image' : 'file',
+            url: base64Data,
+            filename: file.name,
+            original_name: file.name,
+            size: file.size,
+            mime: file.type
+          };
+          composerAttachments.push(attObj);
+          renderComposerPreviews();
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeAttachment(idx) {
+      composerAttachments.splice(idx, 1);
+      renderComposerPreviews();
+    }
+
+    function renderComposerPreviews() {
+      const strip = document.getElementById('composer-attachment-preview');
+      if (!strip) return;
+      strip.innerHTML = '';
+      composerAttachments.forEach((att, idx) => {
+        if (att.type === 'image') {
+          const box = document.createElement('div');
+          box.className = 'preview-thumb-box';
+          box.innerHTML = `
+            <img src="${att.url}" alt="${escapeHtml(att.original_name || att.filename)}" />
+            <button type="button" class="btn-remove-preview" onclick="removeAttachment(${idx})" title="Hapus">✕</button>
+          `;
+          strip.appendChild(box);
+        } else {
+          const chip = document.createElement('div');
+          chip.className = 'preview-file-chip';
+          chip.innerHTML = `
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span class="preview-fname" title="${escapeHtml(att.original_name || att.filename)}">${escapeHtml(att.original_name || att.filename)}</span>
+            <button type="button" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:12px; margin-left:4px;" onclick="removeAttachment(${idx})">✕</button>
+          `;
+          strip.appendChild(chip);
+        }
+      });
+    }
+
+    async function submitNote() {
+      const textEl = document.getElementById('note-composer-text');
+      const content = (textEl ? textEl.value : '').trim();
+      if (!content && composerAttachments.length === 0) {
+        showToast('Tulis isi catatan atau pilih file terlebih dahulu!');
+        return;
+      }
+
+      const btnSave = document.getElementById('btn-save-note');
+      const lblSave = document.getElementById('save-note-label');
+      if (btnSave) btnSave.disabled = true;
+      if (lblSave) lblSave.textContent = 'Menyimpan...';
+
+      const curMod = activeModules[currentModuleIndex];
+      const curCourse = courses[activeCourseId];
+
+      const payload = {
+        course_id: activeCourseId,
+        course_title: curCourse ? (curCourse.short_title || curCourse.title) : 'General',
+        module_id: curMod ? curMod.id : 'overview',
+        module_title: curMod ? curMod.title : 'Overview',
+        content: content,
+        attachments: composerAttachments
+      };
+
+      try {
+        const res = await fetch('/pelajari/api/notes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.ok && data.note) {
+            appNotes.unshift(data.note);
+            finishNoteSave();
+            return;
+          }
+        }
+        throw new Error('API note save error');
+      } catch (err) {
+        console.warn('[Notes] Offline fallback save:', err);
+        const localNote = {
+          id: 'note_local_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          ...payload
+        };
+        appNotes.unshift(localNote);
+        finishNoteSave();
+      }
+    }
+
+    function finishNoteSave() {
+      localStorage.setItem('pelajari_notes_cache', JSON.stringify(appNotes));
+      const textEl = document.getElementById('note-composer-text');
+      if (textEl) textEl.value = '';
+      composerAttachments = [];
+      renderComposerPreviews();
+
+      const btnSave = document.getElementById('btn-save-note');
+      const lblSave = document.getElementById('save-note-label');
+      if (btnSave) btnSave.disabled = false;
+      if (lblSave) lblSave.textContent = 'Simpan Catatan';
+
+      showToast('Catatan berhasil ditambahkan ke timeline!');
+      updateNotesBadges();
+      renderTimeline();
+    }
+
+    async function deleteNote(id) {
+      if (!confirm('Apakah lo yakin ingin menghapus catatan ini dari timeline?')) return;
+      try {
+        await fetch(`/pelajari/api/notes/${id}`, { method: 'DELETE' });
+      } catch (e) {}
+
+      appNotes = appNotes.filter(n => n.id !== id);
+      localStorage.setItem('pelajari_notes_cache', JSON.stringify(appNotes));
+      updateNotesBadges();
+      renderTimeline();
+      showToast('Catatan dihapus.');
+    }
+
+    function jumpToModuleFromNote(courseId, moduleId) {
+      closeNotesModal();
+      if (courseId && courseId !== activeCourseId && courses[courseId]) {
+        switchCourse(courseId, 0);
+      }
+      setTimeout(() => {
+        const idx = activeModules.findIndex(m => m.id === moduleId);
+        if (idx !== -1) {
+          selectModule(idx);
+        }
+      }, 50);
+    }
+
+    function openLightbox(imgSrc, caption) {
+      const modal = document.getElementById('modal-lightbox');
+      const img = document.getElementById('lightbox-img');
+      const cap = document.getElementById('lightbox-caption');
+      if (img) img.src = imgSrc;
+      if (cap) cap.textContent = caption || '';
+      if (modal) modal.classList.add('open');
+    }
+
+    function closeLightbox() {
+      const modal = document.getElementById('modal-lightbox');
+      if (modal) modal.classList.remove('open');
+    }
+
+    function formatNoteDate(isoStr) {
+      if (!isoStr) return '';
+      try {
+        const d = new Date(isoStr);
+        const day = d.getDate();
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        const m = months[d.getMonth()];
+        const y = d.getFullYear();
+        const hh = String(d.getHours()).padStart(2, '0');
+        const mm = String(d.getMinutes()).padStart(2, '0');
+        return `${day} ${m} ${y} • ${hh}:${mm} WIB`;
+      } catch (e) {
+        return isoStr;
+      }
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes || bytes <= 0) return '0 B';
+      const k = 1024;
+      const dm = 1;
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function linkify(text) {
+      const urlPattern = /(\b(https?:\/\/|www\.)[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+      return text.replace(urlPattern, function(match) {
+        let url = match;
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+          url = 'https://' + url;
+        }
+        return `<a href="${url}" target="_blank" rel="noopener">${match}</a>`;
+      });
+    }
+
+    function renderTimeline() {
+      const container = document.getElementById('timeline-stream');
+      if (!container) return;
+
+      const curMod = activeModules[currentModuleIndex];
+      let filtered = appNotes.slice();
+
+      // Filter by scope
+      if (notesFilterScope === 'module' && curMod) {
+        filtered = filtered.filter(n => n.module_id === curMod.id);
+      }
+
+      // Filter by search query
+      if (notesSearchQuery) {
+        filtered = filtered.filter(n => {
+          const matchContent = (n.content || '').toLowerCase().includes(notesSearchQuery);
+          const matchMod = (n.module_title || '').toLowerCase().includes(notesSearchQuery);
+          const matchCourse = (n.course_title || '').toLowerCase().includes(notesSearchQuery);
+          const matchFiles = (n.attachments || []).some(a => (a.filename || a.original_name || '').toLowerCase().includes(notesSearchQuery));
+          return matchContent || matchMod || matchCourse || matchFiles;
+        });
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="timeline-empty-state">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <div class="empty-state-title">${notesFilterScope === 'module' ? 'Belum Ada Catatan di Modul Ini' : 'Timeline Masih Kosong'}</div>
+            <div class="empty-state-desc">Tulis rangkuman, refleksi belajar, atau lampirkan tangkapan layar lo pada formulir di atas untuk memulai timeline!</div>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      filtered.forEach(note => {
+        const atts = note.attachments || [];
+        let attsHtml = '';
+
+        if (atts.length > 0) {
+          const imgAtts = atts.filter(a => a.type === 'image');
+          const fileAtts = atts.filter(a => a.type !== 'image');
+
+          if (imgAtts.length > 0) {
+            attsHtml += `<div class="timeline-attachments-grid">`;
+            imgAtts.forEach(img => {
+              attsHtml += `
+                <div class="timeline-img-card" onclick="openLightbox('${img.url}', '${escapeHtml(img.original_name || img.filename)}')">
+                  <img src="${img.url}" alt="${escapeHtml(img.original_name || img.filename)}" loading="lazy" />
+                  <div class="timeline-img-overlay">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                    <span>Buka Ukuran Penuh</span>
+                  </div>
+                </div>
+              `;
+            });
+            attsHtml += `</div>`;
+          }
+
+          if (fileAtts.length > 0) {
+            fileAtts.forEach(file => {
+              attsHtml += `
+                <a href="${file.url}" target="_blank" rel="noopener" class="timeline-file-attachment">
+                  <div class="file-icon-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  </div>
+                  <div class="file-meta-col">
+                    <span class="file-display-name">${escapeHtml(file.original_name || file.filename)}</span>
+                    <span class="file-size-badge">${formatBytes(file.size)} • ${file.mime || 'File Dokumen'}</span>
+                  </div>
+                  <div class="btn-open-file-pill">
+                    <span>Buka File</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  </div>
+                </a>
+              `;
+            });
+          }
+        }
+
+        html += `
+          <div class="timeline-item">
+            <div class="timeline-node-dot"></div>
+            <div class="timeline-item-header">
+              <a href="javascript:void(0)" class="timeline-mod-pill" onclick="jumpToModuleFromNote('${escapeHtml(note.course_id)}', '${escapeHtml(note.module_id)}')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>${escapeHtml(note.module_title || 'Modul')}</span>
+              </a>
+              <span class="timeline-date-label">${formatNoteDate(note.created_at)}</span>
+            </div>
+
+            ${note.content ? `<div class="timeline-body-text">${linkify(escapeHtml(note.content))}</div>` : ''}
+
+            ${attsHtml}
+
+            <div class="timeline-item-footer">
+              <span class="timeline-course-tag">${escapeHtml(note.course_title || '')}</span>
+              <button type="button" class="btn-delete-note" onclick="deleteNote('${note.id}')" title="Hapus catatan">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                <span>Hapus</span>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
     // Initial Startup Boot
     try {
       const urlParams = new URLSearchParams(window.location.search);
@@ -1506,8 +2758,10 @@ html_content = r'''<!DOCTYPE html>
         if (found !== -1) initialIdx = found;
       }
       switchCourse(initialCourse, initialIdx);
+      initNotesSystem();
     } catch (err) {
       switchCourse('caleb', 0);
+      initNotesSystem();
     }
   </script>
 </body>
