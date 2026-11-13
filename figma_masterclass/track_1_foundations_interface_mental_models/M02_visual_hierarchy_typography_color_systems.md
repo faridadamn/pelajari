@@ -18,6 +18,8 @@
 
 ### LAYER 2: MENTAL MODEL & DIAGRAM ASCII
 
+![Spesifikasi Skala Tipografi Modular (Major Third 1.250), Sistem Spasial 8-Point Grid & Ambang Kontras WCAG AAA](assets/figma/m02_8pt_grid_typography_scale.jpg)
+
 ```text
 [8-POINT MODULAR SPATIAL GRID]
 8px    16px     24px      32px       40px        48px

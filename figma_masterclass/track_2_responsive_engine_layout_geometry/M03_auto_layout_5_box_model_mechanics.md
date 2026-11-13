@@ -21,6 +21,8 @@
 
 ### LAYER 2: MENTAL MODEL & DIAGRAM ASCII
 
+![Arsitektur Box Model CSS dan Mekanika Figma Auto Layout 5.0 (Padding, Gap, Hug vs Fill Container)](assets/figma/m03_auto_layout_box_model.jpg)
+
 ```text
 [CSS BOX MODEL vs AUTO LAYOUT FRAME]
 ┌─────────────────────────────────────────────────────────────┐

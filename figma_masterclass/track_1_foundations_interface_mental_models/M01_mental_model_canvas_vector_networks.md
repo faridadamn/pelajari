@@ -18,6 +18,8 @@
 
 ### LAYER 2: MENTAL MODEL & DIAGRAM ASCII
 
+![Perbandingan Topologi Jalur Vektor Tradisional (Kiri) vs Graf Vektor Percabangan Figma Vector Network (Kanan)](assets/figma/m01_vector_networks_topology.jpg)
+
 ```text
 [FRAME CONTAINER: OTONOM (DIV EQUIVALENT)]
 ┌─────────────────────────────────────────────────────────────┐
