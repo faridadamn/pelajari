@@ -11,7 +11,7 @@ Outputs:
 
 import os, sys, re, json, html, glob
 
-OUT_DIR = "/root/pelajari"
+OUT_DIR = "/home/ubuntu/pelajari"
 os.makedirs(OUT_DIR, exist_ok=True)
 
 # ------------------------------------------------------------------------------
@@ -237,6 +237,10 @@ def discover_course_tracks(base_dir, prefix):
     return items
 
 def main():
+    print("Auto-discovering & compiling Cania Citta Masterclass OS...")
+    cania_modules = discover_course_tracks(os.path.join(OUT_DIR, 'caniacitta_masterclass'), 'cania')
+    print(f"Cania Citta items compiled: {len(cania_modules)}")
+
     print("Auto-discovering & compiling Caleb Ralston Masterclass OS...")
     caleb_modules = discover_course_tracks('/root/caleb_masterclass', '')
     print(f"Caleb items compiled: {len(caleb_modules)}")
@@ -282,6 +286,17 @@ def main():
     print(f"Questioning items compiled: {len(questioning_modules)}")
 
     courses_data = {
+        "caniacitta": {
+            "id": "caniacitta",
+            "title": "Cania Citta Rationality & Dialectics Masterclass OS",
+            "short_title": "Cania Citta OS (Makanya Mikir)",
+            "subtitle": "The Scientific Mindset, Formal Logic, Argumentation Architecture, Public Policy & Decision-Making OS",
+            "author": "Cania Citta & Makanya Mikir (Synthesized by Farid Adam)",
+            "tracks_count": 8,
+            "modules_count": 40,
+            "total_items": len(cania_modules),
+            "modules": cania_modules
+        },
         "questioning": {
             "id": "questioning",
             "title": "The Art of High-Leverage Questioning & Executive Presence OS",
@@ -407,6 +422,17 @@ def main():
 
     # Write courses_data.json
     courses_json_path = os.path.join(OUT_DIR, "courses_data.json")
+    # Preserve existing courses from disk if any was empty
+    if os.path.exists(courses_json_path):
+        try:
+            with open(courses_json_path, "r", encoding="utf-8") as exf:
+                old_data = json.load(exf)
+                for ckey, cval in old_data.items():
+                    if ckey not in courses_data or len(courses_data[ckey].get("modules", [])) == 0:
+                        courses_data[ckey] = cval
+        except Exception as e:
+            print("Notice loading old data:", e)
+
     with open(courses_json_path, "w", encoding="utf-8") as f:
         json.dump(courses_data, f)
     print(f"Saved {courses_json_path} ({os.path.getsize(courses_json_path)} bytes).")

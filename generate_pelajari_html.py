@@ -15,8 +15,8 @@ Supports:
 
 import json, os
 
-COURSES_FILE = "/root/pelajari/courses_data.json"
-OUT_HTML = "/root/pelajari/index.html"
+COURSES_FILE = "/home/ubuntu/pelajari/courses_data.json"
+OUT_HTML = "/home/ubuntu/pelajari/index.html"
 
 with open(COURSES_FILE, "r", encoding="utf-8") as f:
     courses_json = f.read()
@@ -1610,7 +1610,10 @@ html_content = r'''<!DOCTYPE html>
               <option value="careercontessa">Career Contessa Workplace OS (8 Tracks • 40 Modul)</option>
               <option value="wesroth">Wes Roth AI Intelligence OS (8 Tracks • 40 Modul)</option>
               <option value="aliabdaal">Ali Abdaal Productivity OS (8 Tracks • 40 Modul)</option>
+              <option value="caniacitta">Cania Citta OS - Makanya Mikir (8 Tracks • 40 Modul)</option>
               <option value="malakaproject">Malaka Project Masterclass OS (8 Tracks • 40 Modul)</option>
+              <option value="genai">Microsoft Generative AI OS (5 Tracks • 12 Modul)</option>
+              <option value="figma">Figma UI/UX & Design Systems OS (5 Tracks • 10 Modul)</option>
             </select>
             <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
@@ -1887,6 +1890,15 @@ html_content = r'''<!DOCTYPE html>
         } else if (courseId === 'github') {
           subEl.textContent = 'GitHub Professional OS • 4 Tracks (CI/CD, Copilot & Project Ops)';
           document.title = 'Pelajari — GitHub Professional OS: The Practical Engineering Masterclass';
+        } else if (courseId === 'caniacitta') {
+          subEl.textContent = 'Cania Citta OS (Makanya Mikir) • 8 Tracks (Logika Formal, Debat Dialektika & Kebijakan Publik)';
+          document.title = 'Pelajari — Cania Citta Rationality & Dialectics Masterclass OS';
+        } else if (courseId === 'genai') {
+          subEl.textContent = 'Microsoft Generative AI OS • 5 Tracks (Copilot, Prompting, LLMs & Azure AI)';
+          document.title = 'Pelajari — Microsoft Generative AI & Copilot Professional OS';
+        } else if (courseId === 'figma') {
+          subEl.textContent = 'Figma UI/UX & Design Systems OS • 5 Tracks (Variables, Dev Mode & Smart Animate)';
+          document.title = 'Pelajari — Figma UI/UX & Design Systems Masterclass OS';
         } else if (courseId === 'malakaproject') {
           subEl.textContent = 'Malaka Project Masterclass OS • 8 Tracks (Critical Thinking, Policy, Economics & Psychology)';
           document.title = 'Pelajari — Malaka Project: The Critical Thinking, Public Policy & Socio-Economic Intelligence OS';
