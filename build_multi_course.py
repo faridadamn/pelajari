@@ -281,7 +281,22 @@ def main():
     questioning_modules = discover_course_tracks('/root/questioning_masterclass', 'q')
     print(f"Questioning items compiled: {len(questioning_modules)}")
 
+    print("Auto-discovering & compiling Managing Up & Managing Team OS...")
+    managing_modules = discover_course_tracks('/root/managing_masterclass', 'mg')
+    print(f"Managing items compiled: {len(managing_modules)}")
+
     courses_data = {
+        "managing": {
+            "id": "managing",
+            "title": "Managing Up & Managing Team OS",
+            "short_title": "Managing Up & Team OS",
+            "subtitle": "Arsitektur Kredibilitas ke Atasan, Seni Menolak & Beda Pendapat, Wibawa Kepemimpinan, dan Feedback Tajam Tanpa Drama",
+            "author": "Farid Adam, Career Contessa, Alex Hormozi, Caleb Ralston & Rhenald Kasali",
+            "tracks_count": 5,
+            "modules_count": 30,
+            "total_items": len(managing_modules),
+            "modules": managing_modules
+        },
         "questioning": {
             "id": "questioning",
             "title": "The Art of High-Leverage Questioning & Executive Presence OS",

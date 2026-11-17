@@ -1600,6 +1600,7 @@ html_content = r'''<!DOCTYPE html>
           <label class="course-label" for="course-select">PILIH MASTERCLASS</label>
           <div class="course-select-wrap">
             <select id="course-select" onchange="switchCourse(this.value)">
+              <option value="managing">Managing Up & Managing Team OS (5 Tracks • 30 Modul)</option>
               <option value="questioning">The Art of Questioning OS (1 Track • 4 Modul)</option>
               <option value="storytelling">Organic Storytelling & Funnel OS (5 Tracks • 20 Modul)</option>
               <option value="copywriting">Direct-Response Copywriting OS (5 Tracks • 20 Modul)</option>
@@ -1872,7 +1873,10 @@ html_content = r'''<!DOCTYPE html>
       // Update subtitle & document title
       const subEl = document.getElementById('track-subtitle');
       if (subEl) {
-        if (courseId === 'questioning') {
+        if (courseId === 'managing') {
+          subEl.textContent = 'Managing Up & Managing Team OS • 5 Tracks (Kredibilitas Atasan, Saying No, Wibawa Tim, C.L.E.A.R. Feedback & Konflik)';
+          document.title = 'Pelajari — Managing Up & Managing Team OS';
+        } else if (courseId === 'questioning') {
           subEl.textContent = 'The Art of High-Leverage Questioning OS • 1 Track (Arsitektur Berpikir, Kalibrasi Ego & Protokol Bertanya)';
           document.title = 'Pelajari — The Art of High-Leverage Questioning & Executive Presence OS';
         } else if (courseId === 'storytelling') {
